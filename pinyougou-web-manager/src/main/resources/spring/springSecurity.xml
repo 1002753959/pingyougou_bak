@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--登录页面不拦  资源文件不栏-->
+   <security:http pattern="/login.html" security="none"/>
+    <security:http pattern="/css/**" security="none"></security:http>
+    <security:http pattern="/img/**" security="none"></security:http>
+    <security:http pattern="/js/**" security="none"></security:http>
+    <security:http pattern="/plugins/**" security="none"></security:http>
+
+
+    <!--授权-->
+    <security:http use-expressions="false" auto-config="false">
+        <!--权限-->
+        <security:intercept-url pattern="/**" access="ROLE_ADMIN"/>
+        <!--关闭csrf-->
+        <security:csrf disabled="true"/>
+         <!--自己的路径-->
+        <!--
+            always-use-default-target:强制无论什么URL成功后不是跳转到访问的URL上,而是拦截至设置的成功页面上
+        -->
+        <security:form-login
+                login-page="/login.html"
+                default-target-url="/admin/index.html"
+                authentication-failure-url="/login.html"
+                always-use-default-target="true"
+        />
+
+        <security:headers>
+            <!-- 配置框架页面不拦截 -->
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+    <security:logout logout-url="/logout" logout-success-url="/login.html"/>
+    </security:http>
+
+    <!--认证-->
+<security:authentication-manager>
+    <security:authentication-provider>
+        <security:user-service>
+            <security:user name="chenqi" password="chenqi" authorities="ROLE_ADMIN"/>
+        </security:user-service>
+    </security:authentication-provider>
+</security:authentication-manager>
+</beans>

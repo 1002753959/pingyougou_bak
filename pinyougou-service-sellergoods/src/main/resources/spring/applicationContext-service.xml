@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+">
+    <!--配置服务提供方的扫描-->
+    <!--配置我这个服务提供方的扫描-->
+    <dubbo:application name="pinyougou-service-sellergoods"/>
+    <!--配置连接注册中心的地址自己:-->
+    <!--物理主机-->
+    <dubbo:registry address="zookeeper://192.168.200.128:2181"/>
+    <!--耿林猛服务器-->
+    <!--<dubbo:registry address="zookeeper://47.107.130.132:2181"/>-->
+    <!--自己服务器-->
+    <!--<dubbo:registry address="zookeeper://180.76.55.102:2181"/>-->
+    <!--扫描想要暴露的接口-->
+    <dubbo:annotation package="cn.itcast.core.service"/>
+    <!--配置自己的端口 默认为20881 但是我们一台机器上不有多个服务提供者么 为了不冲突-->
+    <dubbo:protocol name="dubbo" port="20881"/>
+
+
+
+</beans>
