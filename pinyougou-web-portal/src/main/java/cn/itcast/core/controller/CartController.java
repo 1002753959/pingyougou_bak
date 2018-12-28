@@ -170,6 +170,7 @@ public class CartController {
 
     /**
      * 购物车页面的初始化方法,查询购物车
+     *
      * @param request
      * @return
      */
@@ -206,24 +207,24 @@ public class CartController {
             }
         }
 
-            //装满购物车
+        //装满购物车
 
-            //1.获取
-            if (cartList != null && cartList.size() > 0) {
+        //1.获取
+        if (cartList != null && cartList.size() > 0) {
 //3.有(由于我们当时装时只装了SellerId,ItemId,Num)所以在回显的时候我们需要根据这三个数据将购物车装满
-                for (Cart cart : cartList) {
-                    List<OrderItem> orderItemList = cart.getOrderItemList();
-                    for (OrderItem orderItem : orderItemList) {
-                        Item item = cartService.queryItembyId(orderItem.getId());
-                        orderItem.setTitle(item.getTitle());
-                        orderItem.setPrice(item.getPrice());
-                        orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue() * orderItem.getNum()));
-                        orderItem.setPicPath(item.getImage());
-                        cart.setName(item.getSeller());
-                    }
+            for (Cart cart : cartList) {
+                List<OrderItem> orderItemList = cart.getOrderItemList();
+                for (OrderItem orderItem : orderItemList) {
+                    Item item = cartService.queryItembyId(orderItem.getId());
+                    orderItem.setTitle(item.getTitle());
+                    orderItem.setPrice(item.getPrice());
+                    orderItem.setTotalFee(new BigDecimal(item.getPrice().doubleValue() * orderItem.getNum()));
+                    orderItem.setPicPath(item.getImage());
+                    cart.setName(item.getSeller());
                 }
-
             }
+
+        }
 
 
 //4.回显
