@@ -96,9 +96,12 @@ public class GoodsServicImpl implements GoodsService {
     //注入发布/订阅模式的消息发布目标地的对象的接口,实现类在配置文件实例化的那个
     @Autowired
     private Destination topicPageAndSolrDestination;
-    //注入点对点模式的消息发布目标地的对象
+    //注入发布/订阅模式的消息发布目标地的对象的接口删除静态页面和索引库,实现类在配置文件实例化的那个
     @Autowired
-    private Destination queueSolrDeleteDestination;
+    private Destination topicPageAndSolrDeleteDestination;
+    //注入点对点模式的消息发布目标地的对象
+//    @Autowired
+//    private Destination queueSolrDeleteDestination;
 
     public List<Goods> qeuryList(){
         return goodsDao.selectByExample(null);
@@ -183,7 +186,7 @@ public class GoodsServicImpl implements GoodsService {
      * @return
      */
     @Override
-    public PageResult search(int page, int rows, Goods goods) {
+    public PageResult managerSearch(int page, int rows, Goods goods) {
         //开始分页查询
         PageHelper.startPage(page, rows);
         GoodsQuery goodsQuery = new GoodsQuery();
@@ -193,9 +196,14 @@ public class GoodsServicImpl implements GoodsService {
         criteria.andIsDeleteIsNull();
         //判断有没有条件
         if (goods != null) {
-            if (goods.getAuditStatus() != null) {
-                criteria.andAuditStatusEqualTo(goods.getAuditStatus());
-            }
+//            if (goods.getAuditStatus() != null) {
+//                criteria.andAuditStatusEqualTo(goods.getAuditStatus());
+//            }
+            ArrayList<String> list = new ArrayList<>();
+            list.add("1");
+            list.add("2");
+            list.add("3");
+            criteria.andAuditStatusIn(list);
             if (goods.getGoodsName() != null && !"".equals(goods.getGoodsName().trim())) {
                 criteria.andGoodsNameLike("%" + goods.getGoodsName() + "%");
             }
@@ -310,7 +318,7 @@ public class GoodsServicImpl implements GoodsService {
 
 
     /**
-     * 设置审核通过的状态
+     * 设置shop和manager公用的设置状态的方法
      * @param ids
      * @param status
      */
@@ -322,20 +330,118 @@ public class GoodsServicImpl implements GoodsService {
             //1.更改数据库表中的状态
             goods.setId(id);
             goodsDao.updateByPrimaryKeySelective(goods);
-            if ("1".equals(status)) {
-                //发送消息给MQ.之后的工作其他模块来做
-                jmsTemplate.send(topicPageAndSolrDestination,new MessageCreator() {
-                    @Override
-                    public Message createMessage(Session session) throws JMSException {
-                        return session.createTextMessage(String.valueOf(id));
-                    }
-                });
 
-
-
-            }
         }
     }
+
+    /**
+     * 更新商品的审核状态为审核中状态
+     * @param ids
+     */
+    @Override
+    public void upAudit(Long[] ids) {
+        GoodsQuery goodsQuery = new GoodsQuery();
+        goodsQuery.createCriteria().andIdIn(Arrays.asList(ids));
+        Goods goods = new Goods();
+        goods.setAuditStatus("3");
+        goodsDao.updateByExampleSelective(goods, goodsQuery);
+    }
+
+    @Override
+    public Goods findOneCart(Long id) {
+        return goodsDao.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Goods findGoodsOne(Long id) {
+        return goodsDao.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public PageResult shopSearch(int page, int rows, Goods goods) {
+        //开始分页查询
+        PageHelper.startPage(page, rows);
+        GoodsQuery goodsQuery = new GoodsQuery();
+        GoodsQuery.Criteria criteria = goodsQuery.createCriteria();
+
+        //并且选择没有被删除的商品
+        criteria.andIsDeleteIsNull();
+        //判断有没有条件
+        if (goods != null) {
+//            if (goods.getAuditStatus() != null) {
+//                criteria.andAuditStatusEqualTo(goods.getAuditStatus());
+//            }
+            ArrayList<String> list = new ArrayList<>();
+            list.add("0");
+            list.add("1");
+            list.add("2");
+            list.add("3");
+            list.add("4");
+            list.add("5");
+            criteria.andAuditStatusIn(list);
+            criteria.andSellerIdEqualTo(goods.getSellerId());
+            if (goods.getGoodsName() != null && !"".equals(goods.getGoodsName().trim())) {
+                criteria.andGoodsNameLike("%" + goods.getGoodsName() + "%");
+            }
+        }
+        Page<Goods> pageBean = (Page<Goods>) goodsDao.selectByExample(goodsQuery);
+        return new PageResult(pageBean.getTotal(), pageBean.getResult());
+    }
+
+    /**
+     * 商品上架
+     * @param ids
+     */
+    @Override
+    public void up(Long[] ids) {
+
+        //更改数据库中的状态为4
+        Goods goods = new Goods();
+        goods.setAuditStatus("4");
+        for (Long id : ids) {
+            //1.更改数据库表中的状态
+            goods.setId(id);
+            goodsDao.updateByPrimaryKeySelective(goods);
+            //MQ发送消息生成静态页面
+            //MQ发送消息添加索引库
+            jmsTemplate.send(topicPageAndSolrDestination, new MessageCreator() {
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    return session.createTextMessage(String.valueOf(id));
+                }
+            });
+        }
+
+    }
+
+    /**
+     * 商品下架
+     * @param ids
+     */
+    @Override
+    public void down(Long[] ids) {
+        //更改数据库中的状态为4
+        //MQ发送消息生成静态页面
+        //MQ发送消息添加索引库
+
+        //更改数据库中的状态为5
+        Goods goods = new Goods();
+        goods.setAuditStatus("5");
+        for (Long id : ids) {
+            //1.更改数据库表中的状态
+            goods.setId(id);
+            goodsDao.updateByPrimaryKeySelective(goods);
+            //MQ发送消息删除静态页面
+            //MQ发送消息删除索引库
+            jmsTemplate.send(topicPageAndSolrDeleteDestination, new MessageCreator() {
+                @Override
+                public Message createMessage(Session session) throws JMSException {
+                    return session.createTextMessage(String.valueOf(id));
+                }
+            });
+        }
+    }
+
 
     /**
      * 批量删除
@@ -349,15 +455,6 @@ public class GoodsServicImpl implements GoodsService {
             //1.删除是吧数据库中的delete字段改成1
             goods.setId(id);
             goodsDao.updateByPrimaryKeySelective(goods);
-            //发送点对点消息,让pinyougou-service-search把这个商品的solr删除了
-            jmsTemplate.send(queueSolrDeleteDestination, new MessageCreator() {
-                @Override
-                public Message createMessage(Session session) throws JMSException {
-                    return session.createTextMessage(String.valueOf(id));
-                }
-            });
-
-            //TODO 静态页面先不用删除
         }
 
     }

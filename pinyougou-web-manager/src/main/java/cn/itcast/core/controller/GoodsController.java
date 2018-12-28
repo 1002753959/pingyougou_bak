@@ -82,7 +82,7 @@ public class GoodsController {
     @RequestMapping("/search")
     public PageResult search(int page, int rows, @RequestBody(required = false) Goods goods) {
         //运营商后台查询所有的商品,不用查某个商家的商品了
-        return goodsService.search(page, rows, goods);
+        return goodsService.managerSearch(page, rows, goods);
     }
 
     /**
@@ -131,12 +131,24 @@ public class GoodsController {
     @RequestMapping("/updateStatus")
     public Result updateStatus(Long[] ids,String status){
         try {
+            for (Long id : ids) {
+                Goods goods = goodsService.findGoodsOne(id);
+                if (goods.getAuditStatus().equals("1")) {
+                    return new Result(false, "商品id为" + id + "的商品的状态为审核通过");
+                }
+                if (goods.getAuditStatus().equals("2")) {
+                    return new Result(false, "商品id为" + id + "的商品的状态为审核未通过,不能通过");
+                }
+            }
+
+
             goodsService.updateStatus(ids, status);
             return new Result(true, "成功");
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "失败");
         }
-
     }
+
+
 }

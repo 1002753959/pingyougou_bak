@@ -78,7 +78,7 @@ app.controller('goodsController' ,function($scope,$controller,itemCatService   ,
 	}
     
 	// 显示状态
-	$scope.status = ["未审核","审核通过","审核未通过","关闭"];
+	$scope.status = ["未审核","审核通过","审核未通过","待审核","关闭"];
 	
 	$scope.itemCatList = [];
 	// 显示分类:
