@@ -79,13 +79,16 @@ public class SpecificationServiceImpl implements SpecificationService{
      * @return
      */
     @Override
-    public PageResult  search(int pageNum, int pageSize, Specification specification) {
+    public PageResult search(int pageNum, int pageSize, Specification specification) {
 
         PageHelper.startPage(pageNum, pageSize);
         //判断specification对象中的条件是否为空
+        SpecificationQuery specificationQuery = new SpecificationQuery();
+        SpecificationQuery.Criteria criteria = specificationQuery.createCriteria();;
         if (specification != null) {
-            SpecificationQuery specificationQuery = new SpecificationQuery();
-            SpecificationQuery.Criteria criteria = specificationQuery.createCriteria();
+            if (null != specification.getStatus()) {
+                criteria.andStatusEqualTo(specification.getStatus());
+            }
             if (specification.getSpecName() != null && !"".equals(specification.getSpecName().trim())) {
                 criteria.andSpecNameLike("%" + specification.getSpecName() + "%");
             }
@@ -101,6 +104,7 @@ public class SpecificationServiceImpl implements SpecificationService{
      */
     @Override
     public void add(SpecificationVo specificationVo) {
+        specificationVo.getSpecification().setStatus("3");
         //添加规格
         specificationDao.insertSelective(specificationVo.getSpecification());
         //添加规格的选项
@@ -175,5 +179,38 @@ public class SpecificationServiceImpl implements SpecificationService{
         return specificationOptionDao.selectByExample(specificationOptionQuery);
     }
 
+    /**
+     * 修改审核状态
+     * @param ids
+     * @param status
+     */
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        Specification specification = new Specification();
+        specification.setStatus(status);
+        if (null != ids && ids.length > 0) {
+            for (Long id : ids) { // 商品表的ID
+                if ("3".equals(findOne(id).getSpecification().getStatus())) {
+                    specification.setId(id);
+                    // 更新审核状态
+                    specificationDao.updateByPrimaryKeySelective(specification);
+                }
+            }
+        }
+    }
 
+    @Override
+    public void updateStatus1(Long[] ids, String status) {
+        Specification specification = new Specification();
+        specification.setStatus(status);
+        if (null != ids && ids.length > 0) {
+            for (Long id : ids) { // 商品表的ID
+                if ("0".equals(findOne(id).getSpecification().getStatus())) {
+                    specification.setId(id);
+                    // 更新审核状态
+                    specificationDao.updateByPrimaryKeySelective(specification);
+                }
+            }
+        }
+    }
 }

@@ -40,7 +40,6 @@ app.controller('goodsController' ,function($scope,$controller,itemCatService   ,
 			serviceObject=goodsService.add( $scope.entity  );//增加 
 		}				
 		serviceObject.success(
-
 			function(response){
 				if(response.flag){
 					//重新查询 

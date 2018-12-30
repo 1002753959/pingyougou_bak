@@ -442,7 +442,6 @@ public class GoodsServicImpl implements GoodsService {
         }
     }
 
-
     /**
      * 批量删除
      * @param ids

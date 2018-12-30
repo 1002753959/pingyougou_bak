@@ -22,4 +22,8 @@ public interface SpecificationService {
     List<Map> selectOptionList();
 
     List<SpecificationOption> findOptionsBySpecId(String specId);
+
+    void updateStatus(Long[] ids, String status);
+
+    void updateStatus1(Long[] ids, String status);
 }
