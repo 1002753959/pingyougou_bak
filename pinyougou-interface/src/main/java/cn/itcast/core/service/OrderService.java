@@ -11,4 +11,7 @@ public interface OrderService {
     List<Order> findAll(String name);
 
     PageResult search(int page, int rows, Order order, String name);
+
+    List<Integer> findLine(String name ,Integer num);
+
 }

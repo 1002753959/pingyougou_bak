@@ -55,6 +55,7 @@ import utils.IdWorker;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -204,5 +205,33 @@ public class OrderServiceImpl implements OrderService {
         //查询
         Page<Order> pageBean = (Page<Order>) orderDao.selectByExample(orderQuery);
         return new PageResult(pageBean.getTotal(), pageBean.getResult());
+    }
+
+    /**
+     * 根据星期划分查出商家的销售额用于前台的折线图
+     * @return
+     */
+    @Override
+    public List<Integer> findLine(String name,Integer k) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = k; i < k+6; i++) {
+            List<Integer> totalFee = orderDao.findLine(i+1, i, name);
+            int count = 0;
+            for (Integer integer : totalFee) {
+                count += integer;
+            }
+            list.add(count);
+        }
+        Collections.reverse(list);
+
+
+
+
+
+
+
+
+
+        return list;
     }
 }
