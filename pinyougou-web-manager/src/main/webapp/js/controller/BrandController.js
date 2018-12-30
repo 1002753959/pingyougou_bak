@@ -68,7 +68,7 @@ app.controller('brandController', function ($controller,$scope,brandService) {
 
     //点击删除按钮把数组传到后台删除
     $scope.delete = function () {
-        brandService.deleteByIds($scope.selectIds).success(
+        brandService.delete($scope.selectIds).success(
             function (response) {
                 if (response.flag) {
                     //成功跳转到刷新
@@ -80,6 +80,32 @@ app.controller('brandController', function ($controller,$scope,brandService) {
             }
         )
     }
+    $scope.status = ["待审核","审核通过","审核未通过","未审核"];
+
+// 审核的方法
+    $scope.updateStatus = function(status){
+        brandService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.flag){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+            }else{
+                alert(response.message);
+            }
+        });
+    }
+
+    // 显示状态
 
 
+   /* $scope.BrandList = [];
+    // 显示分类:
+    $scope.findBrandList = function(){
+
+        brandService.findAll().success(function(response){
+            for(var i=0;i<response.length;i++){
+                $scope.BrandList[response[i].id] = response[i].name;
+            }
+        });
+    }*/
 });
+

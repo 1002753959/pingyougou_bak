@@ -29,5 +29,5 @@ public interface SellerDao {
 
     int updateByPrimaryKey(Seller record);
 
-    void updateStatus(@Param("sellerId") String sellerId,@Param("status") String status);
+    void updateStatus(String sellerId, String status);
 }

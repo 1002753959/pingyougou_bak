@@ -37,10 +37,7 @@ import cn.itcast.core.pojo.specification.Specification;
 import cn.itcast.core.pojo.specification.SpecificationVo;
 import cn.itcast.core.service.SpecificationService;
 import com.alibaba.dubbo.config.annotation.Reference;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -86,7 +83,6 @@ public class SpecificationController {
             return new Result(true, "失败");
         }
     }
-
 
     /**
      * 找一个
@@ -135,6 +131,22 @@ public class SpecificationController {
     public List<Map> selectOptionList(){
         return specificationService.selectOptionList();
     }
+
+    /*
+     * 审核品牌状态
+     * */
+    @RequestMapping("/updateStatus1")
+    public Result updateStatus1(Long[] ids,String status){
+        try {
+            specificationService.updateStatus1(ids, status);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "失败");
+        }
+
+    }
+
 
 
 }

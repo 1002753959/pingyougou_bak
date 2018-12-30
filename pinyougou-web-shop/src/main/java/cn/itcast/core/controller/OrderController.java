@@ -1,4 +1,7 @@
 package cn.itcast.core.controller;
+
+import cn.itcast.core.entity.PageResult;
+import cn.itcast.core.entity.Result;
 //                            _ooOoo_
 //                           o8888888o
 //                           88" . "88
@@ -59,10 +62,30 @@ public class OrderController {
         return null;
     }
 
+    /**
+     * 根据Id查询订单
+     */
+    @RequestMapping("/queryBrandByOrderId")
+    public Order queryBrandByOrderId(Long orderId) throws Exception {
+        return orderService.queryBrandByOrderId(orderId);
+    }
+
     @RequestMapping("/search")
     public PageResult search(int page,int rows,@RequestBody(required = false) Order order) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         return orderService.search(page, rows,order,name);
+    }
+
+    // 修改发货状态
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            orderService.updateStatus(ids, status);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return new Result(false, "失败");
+        }
     }
 
 }

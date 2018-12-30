@@ -60,8 +60,6 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
- *
  * @Author: Chenqi
  * @Description:
  * @Date: Create in 9:04 2018/12/24
@@ -87,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 生成订单的方法
      * 把前台传过来的订单保存到订单表和订单详情表,并删除购物车信息
+     *
      * @param order
      * @param name
      */
@@ -154,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
         payLog.setTotalFee(TP.longValue());
         payLog.setUserId(String.valueOf(users.get(0).getId()));
         payLog.setTradeState("0");
-        payLog.setOrderList(orderList.toString().replace("[","" ).replace("]","" ));
+        payLog.setOrderList(orderList.toString().replace("[", "").replace("]", ""));
         payLog.setPayType("1");
         //保存
         payLogDao.insert(payLog);
@@ -233,5 +232,61 @@ public class OrderServiceImpl implements OrderService {
 
 
         return list;
+    }
+
+    /**
+     * 查询当前商家的订单
+     */
+    @Override
+    public List<Order> findAll(String name) {
+        //PageHelper.startPage(, );
+        return orderDao.selectByExample(null);
+    }
+
+    /**
+     * 根据Id查询订单
+     */
+    @Override
+    public Order queryBrandByOrderId(Long orderId) {
+        return orderDao.selectByPrimaryKey(orderId);
+    }
+
+    /**
+     * 商家后台新添的订单的分页
+     */
+    @Override
+    public PageResult search(int page, int rows, Order order, String name) {
+        //分頁小助手
+        PageHelper.startPage(page, rows);
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        //选择当前商家的订单'
+        criteria.andSellerIdEqualTo(name);
+        //判断有没有条件
+        if (order != null) {
+            if (order.getStatus() != null && !"".equals(order.getStatus().trim())) {
+                criteria.andStatusEqualTo(order.getStatus());
+            }
+            if (order.getOrderId() != null) {
+                criteria.andOrderIdEqualTo(order.getOrderId());
+            }
+        }
+        //查询
+        Page<Order> pageBean = (Page<Order>) orderDao.selectByExample(orderQuery);
+        return new PageResult(pageBean.getTotal(), pageBean.getResult());
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        Order order = new Order();
+        order.setStatus(status);
+        if (ids != null && ids.length > 0) {
+            for (Long id : ids) { // 商品表的ID
+                if ("2".equals(queryBrandByOrderId(id).getStatus()) || "3".equals(queryBrandByOrderId(id).getStatus())) {
+                    order.setOrderId(id);
+                    orderDao.updateByPrimaryKeySelective(order);
+                }
+            }
+        }
     }
 }

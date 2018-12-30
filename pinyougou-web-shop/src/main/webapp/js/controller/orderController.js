@@ -14,6 +14,15 @@ app.controller('orderController' ,function($scope,$controller,$location,$window,
         );
     }
 
+    //根据id查询Brand
+    $scope.findById = function (orderId) {
+        orderService.queryBrandByOrderId(orderId).success(
+            function (response) {
+                $scope.entity = response;
+            }
+        )
+    }
+
     $scope.searchEntity={};//定义搜索对象
 
 
@@ -46,4 +55,17 @@ app.controller('orderController' ,function($scope,$controller,$location,$window,
     $scope.paymentType = ["","在线支付","货到付款"];
     //支付方式数组status
     $scope.status = ["","未付款","已付款","未发货","已发货","交易成功","交易关闭","待评价"];
+
+    // 发货的方法:
+    $scope.updateStatus = function(status){
+        orderService.updateStatus($scope.selectIds,status).success(function(response){
+            if(response.flag){
+                $scope.reloadList();//刷新列表
+                $scope.selectIds = [];
+
+            }else{
+                alert(response.message);
+            }
+        });
+    }
 });

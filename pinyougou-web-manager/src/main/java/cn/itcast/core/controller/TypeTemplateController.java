@@ -120,4 +120,15 @@ public class TypeTemplateController {
             return new Result(false, "失败");
         }
     }
+    @RequestMapping("/updateStatus1")
+    public Result updateStatus1(Long[] ids ,String status){
+        try {
+            typeTemplateService.updateStatus1(ids,status);
+            return new Result(true,"成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"失败");
+        }
+    }
+
 }
