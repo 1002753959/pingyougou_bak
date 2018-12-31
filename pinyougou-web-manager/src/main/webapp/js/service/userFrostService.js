@@ -36,4 +36,16 @@ app.service('userFrostService',function($http){
 	this.updateStatus = function(id){
 		return $http.get('../user/updateStatus.do?id='+id);
 	}
+	//用户数据导出到excel表
+	this.excelExport = function(){
+		return $http.get('../user/excelExport.do');
+	}
+	//用商品据导出到excel表
+	this.excelExportProduct = function(){
+		return $http.get('../user/excelExportProduct.do');
+	}
+	//用订单据导出到excel表
+	this.excelExportOrder = function(){
+		return $http.get('../user/excelExportOrder.do');
+	}
 });

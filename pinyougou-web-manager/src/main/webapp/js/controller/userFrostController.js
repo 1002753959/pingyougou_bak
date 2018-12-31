@@ -99,4 +99,38 @@ app.controller('userFrostController' ,function($scope,$controller,userFrostServi
 			}
 		});
 	}
+	//用户表/商品表/订单表  的数据导入
+	$scope.excelExport = function(){
+		userFrostService.excelExport().success(function(response){
+			if(response.flag){
+				alert(response.message)
+				//重新查询
+	        	$scope.reloadList();//重新加载
+			}else{
+				alert(response.message);
+			}
+		});
+	}
+	$scope.excelExportProduct = function(){
+		userFrostService.excelExportProduct().success(function(response){
+			if(response.flag){
+				alert(response.message)
+				//重新查询
+	        	$scope.reloadList();//重新加载
+			}else{
+				alert(response.message);
+			}
+		});
+	}
+	$scope.excelExportOrder = function(){
+		userFrostService.excelExportOrder().success(function(response){
+			if(response.flag){
+				alert(response.message)
+				//重新查询
+	        	$scope.reloadList();//重新加载
+			}else{
+				alert(response.message);
+			}
+		});
+	}
 });	
