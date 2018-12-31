@@ -32,33 +32,42 @@ package cn.itcast.core.controller;
 //         .............................................
 
 import cn.itcast.core.entity.Result;
-import cn.itcast.core.pojo.order.Order;
-import cn.itcast.core.service.OrderService;
-import com.alibaba.dubbo.config.annotation.Reference;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import utils.FastDFSClient;
 
 /**
  * @Author: Chenqi
  * @Description:
- * @Date: Create in 9:00 2018/12/24
+ * @Date: Create in 22:41 2018/12/5
  */
 @RestController
-@RequestMapping("/order")
-public class orderController {
-    @Reference
-    private OrderService orderService;
-    @RequestMapping("/add")
-    public Result add(@RequestBody Order order) {
+@RequestMapping("/upload")
+public class UploadeController {
+
+    //从内存中读取properties文件中的值
+    @Value("${FILE_SERVER_URL}")
+    private String url;
+
+    @RequestMapping("/uploadFile")
+    //MultipartFile用来接收带有文件的表单
+    public Result uploadFile (MultipartFile file) throws Exception {
         try {
-            String name = SecurityContextHolder.getContext().getAuthentication().getName();
-            orderService.add(order, name);
-            return new Result(true, "提交成功");
+            //创建引入的dfsClient工具类
+            FastDFSClient dfsClient = new FastDFSClient("classpath:fastDFS/fdfs_client.conf");
+            //获取文件的后缀名
+            String ext = FilenameUtils.getExtension(file.getOriginalFilename());
+            //上传文件
+            String path = dfsClient.uploadFile(file.getBytes(), ext);
+            return new Result(true, url + path);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(false, "提交失败");
+            return new Result(false, "上传失败");
         }
     }
 }
+
+

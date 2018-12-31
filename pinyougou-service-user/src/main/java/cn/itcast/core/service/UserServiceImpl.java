@@ -36,6 +36,7 @@ import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.log.PayLogQuery;
 import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.pojo.user.UserQuery;
 import cn.itcast.core.service.UserService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -123,6 +124,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    //根据名字(当前登录的)查询数据
+    public User getUserInfomation(String name) throws Exception {
+        UserQuery userQuery = new UserQuery();
+        UserQuery.Criteria criteria = userQuery.createCriteria();
+        criteria.andUsernameEqualTo(name);
+        List<User> users = userDao.selectByExample(userQuery);
+        if (0<users.size()){
+            users.get(0).setPassword("");
+            return users.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public void saveUserInfomation(User user) throws Exception {
+
+
+        UserQuery userQuery = new UserQuery();
+        userQuery.createCriteria().andUsernameEqualTo(user.getUsername());
+        userDao.updateByExampleSelective(user,userQuery );
+
+    }
+
+    @Override
     public PageResult queryPage(int pageNum, int pageSize) {
         //分页小助手第一步
         PageHelper.startPage(pageNum, pageSize);
@@ -170,6 +195,8 @@ public class UserServiceImpl implements UserService {
         PageResult pageResult = new PageResult(page.getTotal(), page.getResult());
         return  pageResult;
     }
+
+
 
 //    分页助手——备份
 //    @Override
