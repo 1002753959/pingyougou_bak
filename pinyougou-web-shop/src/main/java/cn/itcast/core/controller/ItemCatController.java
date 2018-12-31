@@ -31,19 +31,15 @@ package cn.itcast.core.controller;
 //                  不见满街漂亮妹，哪个归得程序员？
 //         .............................................
 
-import cn.itcast.core.entity.PageResult;
-import cn.itcast.core.pojo.good.Goods;
+import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.item.ItemCat;
-import cn.itcast.core.pojo.template.TypeTemplate;
 import cn.itcast.core.service.ItemCatService;
-import cn.itcast.core.service.TypeTemplateService;
 import com.alibaba.dubbo.config.annotation.Reference;
-import jdk.nashorn.internal.ir.LoopNode;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: Chenqi
@@ -57,21 +53,38 @@ public class ItemCatController {
     @Reference
     private ItemCatService itemCatService;
 
-    @Reference
-    private TypeTemplateService typeTemplateService;
-    /**
-     * 根据父Id寻找分类
-     * @param parentId
-     * @return
-     */
+
+
     @RequestMapping("/findByParentId")
     public List<ItemCat> findByParentId(Long parentId){
         return itemCatService.findByParentId(parentId);
     }
 
+    @RequestMapping("/add")
+    public Result add (@RequestBody ItemCat itemCat){
+        try {
+            itemCatService.add(itemCat);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "失败");
+        }
+    }
+
     @RequestMapping("/findOne")
     public ItemCat findOne (Long id){
         return itemCatService.findOne(id);
+    }
+
+    @RequestMapping("/update")
+    public Result update (@RequestBody ItemCat itemCat){
+        try {
+            itemCatService.update(itemCat);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "失败");
+        }
     }
 
     /**
@@ -83,4 +96,15 @@ public class ItemCatController {
         return itemCatService.findAll();
     }
 
+    // 修改审核状态
+    @RequestMapping("/updateStatus")
+    public Result updateStatus(Long[] ids, String status) {
+        try {
+            itemCatService.updateStatus(ids, status);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return new Result(false, "失败");
+        }
+    }
 }

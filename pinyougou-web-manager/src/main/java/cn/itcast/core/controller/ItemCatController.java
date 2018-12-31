@@ -32,6 +32,7 @@ package cn.itcast.core.controller;
 //         .............................................
 
 import cn.itcast.core.entity.Result;
+import cn.itcast.core.pojo.good.Brand;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.service.ItemCatService;
 import com.alibaba.dubbo.config.annotation.Reference;
@@ -57,7 +58,6 @@ public class ItemCatController {
 
     @RequestMapping("/findByParentId")
     public List<ItemCat> findByParentId(Long parentId){
-
 
         return itemCatService.findByParentId(parentId);
     }
@@ -97,5 +97,20 @@ public class ItemCatController {
     public List<ItemCat> findAll(){
         return itemCatService.findAll();
     }
-    
+
+
+    /*
+     * 审核品牌状态
+     * */
+    @RequestMapping("/updateStatus1")
+    public Result updateStatus1(Long[] ids,String status){
+        try {
+            itemCatService.updateStatus1(ids, status);
+            return new Result(true, "成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "失败");
+        }
+
+    }
 }

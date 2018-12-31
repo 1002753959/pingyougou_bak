@@ -47,7 +47,7 @@ public interface GoodsService {
 
     void add(GoodsVo goodsVo);
 
-    PageResult search(int page, int rows, Goods goods);
+    PageResult managerSearch(int page, int rows, Goods goods);
 
     void delete(Long[] ids);
 
@@ -56,4 +56,17 @@ public interface GoodsService {
     void update(GoodsVo goodsVo);
 
     void updateStatus(Long[] ids, String status);
+
+    void upAudit(Long[] ids);
+
+    Goods findOneCart(Long id);
+
+    Goods findGoodsOne(Long id);
+
+    PageResult shopSearch(int page, int rows, Goods goods);
+
+
+    void up(Long[] ids);
+
+    void down(Long[] ids);
 }

@@ -28,5 +28,22 @@ app.service('goodsService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../goods/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+
+    //更新状态为审核中
+    this.upAudit = function(ids){
+        return $http.get('../goods/upAudit.do?ids='+ids);
+    }
+
+    //上架
+    this.up = function(ids){
+        return $http.get('../goods/up.do?ids='+ids);
+    }
+
+    //下架
+    this.down = function(ids){
+        return $http.get('../goods/down.do?ids='+ids);
+    }
+
+
 });

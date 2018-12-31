@@ -37,7 +37,6 @@ import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.good.Goods;
 import cn.itcast.core.service.GoodsService;
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -87,7 +86,7 @@ public class GoodsController {
     public PageResult search(int page, int rows, @RequestBody(required = false) Goods goods) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         goods.setSellerId(name);
-        return goodsService.search(page, rows, goods);
+        return goodsService.shopSearch(page, rows, goods);
     }
 
     /**
@@ -130,6 +129,87 @@ public class GoodsController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Result(false, "失败");
+        }
+    }
+
+    /**
+     * 更新商品的状态为审核中状态
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/upAudit")
+    public Result upAudit (Long[] ids){
+        try {
+            for (Long id : ids) {
+                Goods goods = goodsService.findOneCart(id);
+                if (goods.getAuditStatus().equals("1")) {
+                    return new Result(false, "商品号为:"+id+"的商品状态为审核通过");
+                }
+                if (goods.getAuditStatus().equals("2")) {
+                    return new Result(false, "商品号为:"+id+"的商品状态为审核未通过");
+                }
+                if (goods.getAuditStatus().equals("3")) {
+                    return new Result(false, "商品号为:"+id+"的商品状态为审核中");
+                }
+                if (goods.getAuditStatus().equals("4")) {
+                    return new Result(false, "商品号为:"+id+"的商品状态为关闭");
+                }
+
+            }
+
+
+            goodsService.upAudit(ids);
+            return new Result(true,"提交审核成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"提交审核失败");
+        }
+    }
+
+    /**
+     * 上架
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/up")
+    public Result up (Long[] ids){
+        for (Long id : ids) {
+            Goods goodsOne = goodsService.findGoodsOne(id);
+            if (!goodsOne.getAuditStatus().equals("1")) {
+                return new Result(false, "该商品还未审核通过");
+            }
+        }
+
+        try {
+            goodsService.up(ids);
+            return new Result(true, "上架成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "上架失败");
+        }
+    }
+
+
+    /**
+     * 下架
+     * @param ids
+     * @return
+     */
+    @RequestMapping("/down")
+    public Result down (Long[] ids){
+        for (Long id : ids) {
+            Goods goodsOne = goodsService.findGoodsOne(id);
+            if (!goodsOne.getAuditStatus().equals("4")) {
+                return new Result(false, "该商品非已上架状态");
+            }
+        }
+
+        try {
+            goodsService.down(ids);
+            return new Result(true, "下架成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "下架失败");
         }
     }
 }

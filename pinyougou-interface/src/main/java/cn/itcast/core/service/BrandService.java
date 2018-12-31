@@ -22,4 +22,8 @@ public interface BrandService {
     PageResult queryPageWithSearch(int pageNum, int pageSize, Brand brand);
 
     List<Map> selectOptionList();
+
+    void updateStatus(Long[] ids, String status) throws Exception;
+
+    void updateStatus1(Long[] ids, String status)throws Exception;
 }

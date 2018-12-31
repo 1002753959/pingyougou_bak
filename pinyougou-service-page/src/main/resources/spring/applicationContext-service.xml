@@ -9,6 +9,8 @@
        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
 ">
 
+
+
     <!--声明服务提供者-->
     <!--配置提供者的名字-->
     <dubbo:application name="pinyougou-service-search"/>
