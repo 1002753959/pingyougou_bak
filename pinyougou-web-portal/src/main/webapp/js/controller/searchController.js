@@ -128,5 +128,20 @@ app.controller('searchController',function($scope,$location,searchService){
 		alert(goodsId);
 		window.open("http://localhost:9005/"+goodsId+".html");
 	}
+
+
+    //商品收藏
+    $scope.addGoodsCollection=function(itemId){
+        searchService.addGoodsCollection(itemId).success(
+            function(response){
+               // window.open("http://localhost:9104/goodsCollection.html");
+            	//alert(response+"哈哈哈");
+                $scope.fl=response.flag;
+                location.href="http://localhost:9104/goodsCollection.html";
+
+            }
+        );
+    }
+
 	
 });

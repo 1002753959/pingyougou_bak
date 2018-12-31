@@ -9,6 +9,7 @@ app.service('cartService',function($http){
 	this.addGoodsToCartList=function(itemId,num){
 		return $http.get('cart/addGoodsToCartList.do?itemId='+itemId+'&num='+num);
 	}
+
 	
 	//求合计数
 	this.sum=function(cartList){
@@ -35,6 +36,14 @@ app.service('cartService',function($http){
 	this.submitOrder=function(order){
 		return $http.post('order/add.do',order);		
 	}
-	
+    //收藏商品
+    this.addGoodsCollection=function(itemId){
+        return $http.get('cart/addGoodsCollection.do?itemId='+itemId);
+    }
+
+    //查询收藏商品
+    this.findAllGoodsCollection=function(itemId){
+        return $http.get('cart/findAllGoodsCollection.do?itemId='+itemId);
+    }
 	
 });
