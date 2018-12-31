@@ -103,7 +103,6 @@
           <element id="archive" name="pinyougou-common-1.0-SNAPSHOT.jar">
             <element id="module-output" name="pinyougou-common" />
           </element>
-          <element id="library" level="project" name="Maven: org.apache.poi:poi:3.11" />
         </element>
       </element>
       <element id="directory" name="META-INF">
