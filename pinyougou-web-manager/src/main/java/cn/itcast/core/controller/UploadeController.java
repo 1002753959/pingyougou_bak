@@ -87,7 +87,6 @@ public class UploadeController {
     public String uploadExcel(MultipartFile file) throws Exception {
 
         InputStream is = file.getInputStream();
-//        InputStream is = new FileInputStream(new File(""));
         Workbook hssfWorkbook = null;
 //        if (fileName.endsWith("xlsx")){
 //            hssfWorkbook = new XSSFWorkbook(is);//Excel 2007
