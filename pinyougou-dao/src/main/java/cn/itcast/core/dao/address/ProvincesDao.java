@@ -2,9 +2,8 @@ package cn.itcast.core.dao.address;
 
 import cn.itcast.core.pojo.address.Provinces;
 import cn.itcast.core.pojo.address.ProvincesQuery;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface ProvincesDao {
     int countByExample(ProvincesQuery example);

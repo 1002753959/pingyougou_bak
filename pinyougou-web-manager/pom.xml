@@ -173,8 +173,7 @@
            <artifactId>spring-data-solr</artifactId>
            <version>1.5.5.RELEASE</version>
        </dependency>
-
-
+       <!--interface-->
        <dependency>
            <groupId>com.itheima</groupId>
            <artifactId>pinyougou-interface</artifactId>

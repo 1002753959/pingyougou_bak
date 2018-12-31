@@ -2,9 +2,8 @@ package cn.itcast.core.dao.seller;
 
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.pojo.seller.SellerQuery;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface SellerDao {
     int countByExample(SellerQuery example);
@@ -29,5 +28,5 @@ public interface SellerDao {
 
     int updateByPrimaryKey(Seller record);
 
-    void updateStatus(@Param("sellerId") String sellerId,@Param("status") String status);
+    void updateStatus(String sellerId, String status);
 }

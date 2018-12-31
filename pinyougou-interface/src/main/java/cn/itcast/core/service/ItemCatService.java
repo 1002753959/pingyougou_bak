@@ -16,4 +16,5 @@ public interface ItemCatService {
 
     List<ItemCat> findAll();
 
+    List<ItemCat> findByCategoryList1(Long categoryId);
 }

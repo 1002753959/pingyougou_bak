@@ -105,7 +105,7 @@
     insert into tb_specification (id, spec_name)
     values (#{id,jdbcType=BIGINT}, #{specName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.itcast.core.pojo.specification.Specification" useGeneratedKeys="true" keyProperty="id" >
+  <insert id="insertSelective" parameterType="cn.itcast.core.pojo.specification.Specification" >
     insert into tb_specification
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -166,9 +166,4 @@
     set spec_name = #{specName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-  <!--新加查询id和name以List<Map>的形式返回-->
-  <select id="selectOptionList" resultType="map">
-    SELECT id,spec_name text from tb_specification
-  </select>
 </mapper>
