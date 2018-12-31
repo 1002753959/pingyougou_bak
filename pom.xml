@@ -23,7 +23,7 @@
         <module>pinyougou-web-seckill</module>
         <module>pinyougou-web-shop</module>
         <module>pinyougou-web-user</module>
-        <module>../springdatasolr</module>
+
     </modules>
 
     <!-- 集中定义依赖版本号 -->

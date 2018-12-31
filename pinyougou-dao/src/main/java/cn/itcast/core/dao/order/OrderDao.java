@@ -1,5 +1,6 @@
 package cn.itcast.core.dao.order;
 
+import cn.itcast.core.entity.GoodsTime;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
 import org.apache.ibatis.annotations.Param;
@@ -28,4 +29,7 @@ public interface OrderDao {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+     List<Integer> findLine(@Param("prefix") int prefix, @Param("postfix") int postfix,@Param("name") String name);
+
 }

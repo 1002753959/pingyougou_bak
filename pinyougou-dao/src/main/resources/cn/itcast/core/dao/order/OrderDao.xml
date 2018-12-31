@@ -530,4 +530,17 @@
       seller_id = #{sellerId,jdbcType=VARCHAR}
     where order_id = #{orderId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="findLine"  resultType="Integer" parameterType="map">
+  SELECT
+  i.total_fee
+ FROM tb_order o
+  LEFT JOIN tb_order_item i
+    ON o.order_id = i.order_id
+    WHERE i.seller_id=#{name}
+     AND create_time BETWEEN DATE_SUB(NOW(),INTERVAL #{prefix} DAY )
+    AND DATE_SUB(NOW(),INTERVAL #{postfix} DAY )
+</select>
+
 </mapper>

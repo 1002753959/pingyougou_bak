@@ -94,10 +94,17 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
+    /*select
     id,item_id,goods_id,order_id,title,price,num,total_fee,pic_path,seller_id
     from tb_order_item
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}*/
+
+    /*订单统计*/
+    SELECT
+    a.seller_id,a.order_id,b.title, b.price,b.num,b.total_fee
+    from tb_order_item b,tb_order a
+    where b.order_id = a.order_id
+
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from tb_order_item

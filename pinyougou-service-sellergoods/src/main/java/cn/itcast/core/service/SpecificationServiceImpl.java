@@ -79,7 +79,7 @@ public class SpecificationServiceImpl implements SpecificationService{
      * @return
      */
     @Override
-    public PageResult  search(int pageNum, int pageSize, Specification specification) {
+    public PageResult search(int pageNum, int pageSize, Specification specification) {
 
         PageHelper.startPage(pageNum, pageSize);
         //判断specification对象中的条件是否为空
