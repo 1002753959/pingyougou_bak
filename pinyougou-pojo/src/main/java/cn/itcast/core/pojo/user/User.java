@@ -111,7 +111,36 @@ public class User implements Serializable {
      */
     private Date lastLoginTime;
 
+    /**
+     * 下单次数
+     */
+    private int idTimes;
+
+
+
+    /**
+     * 交易次数
+     */
+    private int tradeTimes;
+
+
     private static final long serialVersionUID = 1L;
+
+    public int getIdTimes() {
+        return idTimes;
+    }
+
+    public void setIdTimes(int idTimes) {
+        this.idTimes = idTimes;
+    }
+
+    public int getTradeTimes() {
+        return tradeTimes;
+    }
+
+    public void setTradeTimes(int tradeTimes) {
+        this.tradeTimes = tradeTimes;
+    }
 
     public Long getId() {
         return id;

@@ -71,6 +71,36 @@
                                 </div>
                             </div>
                             <!--工具栏/-->
+        <!--工具栏-->
+        <div class="pull-left">
+            <div class="form-group form-inline">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
+                            class="fa fa-trash-o"></i> 删除
+                    </button>
+                    <button type="button" class="btn btn-default" title="屏蔽" onclick='confirm("你确认要屏蔽吗？")'><i
+                            class="fa fa-ban"></i> 屏蔽
+                    </button>
+                    <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
+                            class="fa fa-refresh"></i> 刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
+                状态：<select ng-model="searchEntity.auditStatus">
+                <option value="">全部</option>
+                <option value="0">未审核</option>
+                <option value="1">审核通过</option>
+                <option value="2">审核未通过</option>
+                <option value="3">关闭</option>
+            </select>
+                商品名称：<input type="text" ng-model="searchEntity.goodsName">
+                <button class="btn btn-default" ng-click="reloadList()">查询</button>
+            </div>
+        </div>
+        <!--工具栏/-->
 
 			                  <!--数据列表-->
 			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">

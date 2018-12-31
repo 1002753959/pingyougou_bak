@@ -37,27 +37,29 @@ import cn.itcast.core.dao.order.OrderDao;
 import cn.itcast.core.dao.order.OrderItemDao;
 import cn.itcast.core.dao.user.UserDao;
 import cn.itcast.core.entity.Cart;
+import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.item.Item;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderItem;
+import cn.itcast.core.pojo.order.OrderQuery;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.pojo.user.UserQuery;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
 import utils.IdWorker;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 /**
- *
- *
  * @Author: Chenqi
  * @Description:
  * @Date: Create in 9:04 2018/12/24
@@ -83,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 生成订单的方法
      * 把前台传过来的订单保存到订单表和订单详情表,并删除购物车信息
+     *
      * @param order
      * @param name
      */
@@ -150,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
         payLog.setTotalFee(TP.longValue());
         payLog.setUserId(String.valueOf(users.get(0).getId()));
         payLog.setTradeState("0");
-        payLog.setOrderList(orderList.toString().replace("[","" ).replace("]","" ));
+        payLog.setOrderList(orderList.toString().replace("[", "").replace("]", ""));
         payLog.setPayType("1");
         //保存
         payLogDao.insert(payLog);
@@ -159,5 +162,131 @@ public class OrderServiceImpl implements OrderService {
         redisTemplate.boundHashOps("payLog").put(name, payLog);
 
 
+    }
+
+    /**
+     * 查询当前商家的订单
+     * @return
+     * @param name
+     */
+    @Override
+    public List<Order> findAll(String name) {
+        //PageHelper.startPage(, );
+        return orderDao.selectByExample(null);
+    }
+
+    /**
+     * 商家后台新添的订单的分页
+     * @param page
+     * @param rows
+     * @param order
+     * @param name
+     * @return
+     */
+    @Override
+    public PageResult search(int page, int rows, Order order, String name) {
+        //分頁小助手
+        PageHelper.startPage(page, rows);
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        //选择当前商家的订单'
+        criteria.andSellerIdEqualTo(name);
+        //判断有没有条件
+        if (order != null) {
+            if (order.getStatus() != null && !"".equals(order.getStatus().trim())) {
+                criteria.andStatusEqualTo(order.getStatus());
+            }
+            if (order.getOrderId() != null  ) {
+                criteria.andOrderIdEqualTo(order.getOrderId());
+            }
+        }
+
+        //查询
+        Page<Order> pageBean = (Page<Order>) orderDao.selectByExample(orderQuery);
+        return new PageResult(pageBean.getTotal(), pageBean.getResult());
+    }
+
+    /**
+     * 根据星期划分查出商家的销售额用于前台的折线图
+     * @return
+     */
+    @Override
+    public List<Integer> findLine(String name,Integer k) {
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int i = k; i < k+6; i++) {
+            List<Integer> totalFee = orderDao.findLine(i+1, i, name);
+            int count = 0;
+            for (Integer integer : totalFee) {
+                count += integer;
+            }
+            list.add(count);
+        }
+        Collections.reverse(list);
+
+
+
+
+
+
+
+
+
+        return list;
+    }
+
+    /**
+     * 查询当前商家的订单
+     */
+    @Override
+    public List<Order> findAll(String name) {
+        //PageHelper.startPage(, );
+        return orderDao.selectByExample(null);
+    }
+
+    /**
+     * 根据Id查询订单
+     */
+    @Override
+    public Order queryBrandByOrderId(Long orderId) {
+        return orderDao.selectByPrimaryKey(orderId);
+    }
+
+    /**
+     * 商家后台新添的订单的分页
+     */
+    @Override
+    public PageResult search(int page, int rows, Order order, String name) {
+        //分頁小助手
+        PageHelper.startPage(page, rows);
+        OrderQuery orderQuery = new OrderQuery();
+        OrderQuery.Criteria criteria = orderQuery.createCriteria();
+        //选择当前商家的订单'
+        criteria.andSellerIdEqualTo(name);
+        //判断有没有条件
+        if (order != null) {
+            if (order.getStatus() != null && !"".equals(order.getStatus().trim())) {
+                criteria.andStatusEqualTo(order.getStatus());
+            }
+            if (order.getOrderId() != null) {
+                criteria.andOrderIdEqualTo(order.getOrderId());
+            }
+        }
+        //查询
+        Page<Order> pageBean = (Page<Order>) orderDao.selectByExample(orderQuery);
+        return new PageResult(pageBean.getTotal(), pageBean.getResult());
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        Order order = new Order();
+        order.setStatus(status);
+        if (ids != null && ids.length > 0) {
+            for (Long id : ids) { // 商品表的ID
+                if ("2".equals(queryBrandByOrderId(id).getStatus()) || "3".equals(queryBrandByOrderId(id).getStatus())) {
+                    order.setOrderId(id);
+                    orderDao.updateByPrimaryKeySelective(order);
+                }
+            }
+        }
     }
 }

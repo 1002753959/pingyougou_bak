@@ -15,13 +15,35 @@
     <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
 
+
+    <!--引入angularJs部分-->
+    <!-- 引入angular的js -->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 引入分页相关的JS和CSS -->
+    <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+
+    <!--引入AngularJs相关-->
+    <!--引入带有分页模块的基本模块-->
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+
+    <!--引入父类Controller-->
+    <script type="text/javascript" src="../js/controller/userBaseController.js"></script>
+
+    <!--引入UserController-->
+    <script type="text/javascript" src="../js/controller/UserController.js"></script>
+    <!--引入userService-->
+    <script type="text/javascript" src="../js/service/userService.js"></script>
+    <!--引入uploadService-->
+    <script type="text/javascript" src="../js/service/uploadService.js"></script>
+
 </head>
 
-<body class="hold-transition skin-red sidebar-mini"  >
+<body class="hold-transition skin-red sidebar-mini"  ng-app="pinyougou" ng-controller="UserController">
 <!-- .box-body -->
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">用户统计</h3>
+        <h3 class="box-title">用户统计&nbsp; :&nbsp; 共计&nbsp; <b>{{paginationConf.totalItems}}</b>&nbsp; 人</h3>
     </div>
 
     <div class="box-body">
@@ -42,50 +64,49 @@
                     </th>
                     <th class="sorting_asc">用户ID</th>
                     <th class="sorting">用户名称</th>
-                    <th class="sorting">购买店铺</th>
+                    <th class="sorting">注册邮箱</th>
                     <th class="sorting">联系人姓名</th>
                     <th class="sorting">联系电话</th>
-                    <th class="sorting">活跃度</th>
-                    <th class="sorting">状态</th>
+                    <th class="sorting">用户状态</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                <tr>
-                    <td><input  type="checkbox"></td>
-                    <td>1</td>
-                    <td>梦琪琪商贸有限公司</td>
-                    <td>梦琪琪</td>
-                    <td>李梦琪</td>
-                    <td>13402312232</td>
-                    <td>活跃</td>
-                    <td>
-                        <span>未冻结</span>
 
+                <tr ng-repeat="entity in list">
+                    <td><input  type="checkbox"></td>
+                    <td>{{entity.id}}</td>
+                    <td>{{entity.username}}</td>
+                    <td>{{entity.email}}</td>
+                    <td>{{entity.name}}</td>
+                    <td>{{entity.phone}}</td>
+                    <td>
+                        <span>{{entity.status}}</span>
                     </td>
                     <td class="text-center">
                         <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>
+                    </td>
+                </tr>
+
+                <!--留着备用-->
+                <!--<tr>-->
+                    <!--<td><input  type="checkbox"></td>-->
+                    <!--<td>2</td>-->
+                    <!--<td>黑瞎子苹果专卖店</td>-->
+                    <!--<td>黑瞎子</td>-->
+                    <!--<td>孙大鹏</td>-->
+                    <!--<td>13622244111</td>-->
+                    <!--<td>不活跃</td>-->
+                    <!--<td>-->
+                        <!--<span>已冻结</span>-->
+                    <!--</td>-->
+                    <!--<td class="text-center">-->
                         <!--<button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>-->
+                    <!--</td>-->
+                <!--</tr>-->
 
-                    </td>
-                </tr>
-                <tr>
-                    <td><input  type="checkbox"></td>
-                    <td>2</td>
-                    <td>黑瞎子苹果专卖店</td>
-                    <td>黑瞎子</td>
-                    <td>孙大鹏</td>
-                    <td>13622244111</td>
-                    <td>不活跃</td>
-                    <td>
 
-                        <span>已冻结</span>
-
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>
-                    </td>
-                </tr>
                 </tbody>
             </table>
             <!--数据列表/-->
@@ -95,7 +116,7 @@
         <!-- 数据表格 /-->
 
 
-
+        <tm-pagination conf="paginationConf"></tm-pagination>
 
     </div>
     <!-- /.box-body -->
@@ -180,7 +201,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 </body>
 
