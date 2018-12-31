@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>用户统计</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="../plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
+    <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <!-- 引入angular的js -->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
+    <!-- 引入分页相关的JS和CSS -->
+    <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
+    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
+
+    <script type="text/javascript" src="../js/base_pagination.js"></script>
+    <script type="text/javascript" src="../js/controller/baseController.js"></script>
+    <script type="text/javascript" src="../js/controller/userFrostController.js"></script>
+    <script type="text/javascript" src="../js/service/userFrostService.js"></script>
+</head>
+
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="userFrostController"  >
+<!-- .box-body -->
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">用户管理(冻结)</h3>
+    </div>
+
+    <div class="box-body">
+
+        <!-- 数据表格 -->
+        <div class="table-box">
+
+            <!--工具栏-->
+
+            <div class="box-tools pull-right">
+                <div class="has-feedback">
+                    用户名：<input ng-model="searchEntity.username" >
+                    状态：
+                    <input type="radio" value="" />全部
+                    <input type="radio" value="冻结" />冻结
+                    <input type="radio" value="正常" />正常
+                    <!--<input type="radio" value="2" />审核未通过
+                    <input type="radio" value="3" />关闭-->
+                    <button class="btn btn-default" ng-click="reloadList()" >查询</button>
+                </div>
+            </div>
+            <div>
+                <button class="btn btn-default" ng-click="" >导入</button>
+                <button class="btn btn-default" ng-click="excelExport()" >用户导出</button>
+                <button class="btn btn-default" ng-click="excelExportProduct()" >商品导出</button>
+                <button class="btn btn-default" ng-click="excelExportOrder()" >订单导出</button>
+            </div>
+            <!--工具栏/-->
+
+            <!--数据列表-->
+            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                <thead>
+                <tr>
+                    <th class="" style="padding-right:0px">
+                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                    </th>
+                    <th class="sorting_asc">用户ID</th>
+                    <th class="sorting">用户名称</th>
+                    <th class="sorting">联系电话</th>
+                    <th class="sorting">活跃度</th>
+                    <th class="sorting">状态</th>
+                    <th class="text-center">操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="entity in list">
+                    <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+                    <td>{{entity.id}}</td>
+                    <td>{{entity.username}}</td>
+                    <td>{{entity.phone}}</td>
+                    <td>{{entity.update}}</td>
+                    <td>{{status[entity.status]}}</td>
+
+                    <td class="text-center">
+                        <button type="button" class="btn bg-olive btn-xs" ng-click="findOne(entity.id)" data-toggle="modal" data-target="#sellerModal" >详情</button>
+                    </td>
+                </tr>
+                </tbody>
+
+              <!--  <tbody>
+                <tr>
+                    <td><input  type="checkbox"></td>
+                    <td>1</td>
+                    <td>梦琪琪商贸有限公司</td>
+                    <td>梦琪琪</td>
+                    <td>李梦琪</td>
+                    <td>13402312232</td>
+                    <td>活跃</td>
+                    <td>
+                        <span>未冻结</span>
+
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>
+                        &lt;!&ndash;<button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>&ndash;&gt;
+
+                    </td>
+                </tr>
+                <tr>
+                    <td><input  type="checkbox"></td>
+                    <td>2</td>
+                    <td>黑瞎子苹果专卖店</td>
+                    <td>黑瞎子</td>
+                    <td>孙大鹏</td>
+                    <td>13622244111</td>
+                    <td>不活跃</td>
+                    <td>
+
+                        <span>已冻结</span>
+
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#sellerModal" >详情</button>
+                    </td>
+                </tr>
+                </tbody>-->
+            </table>
+            <!--数据列表/-->
+
+
+        </div>
+        <!-- 数据表格 /-->
+
+
+        <!-- 分页 -->
+        <tm-pagination conf="paginationConf"></tm-pagination>
+
+    </div>
+    <!-- /.box-body -->
+
+
+
+
+    <!-- 商家详情 -->
+    <div class="modal fade" id="sellerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"    data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel">用户详情</h3>
+
+                </div>
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#home" data-toggle="tab">基本信息</a></li>
+                        <li><a href="#linkman" data-toggle="tab">备用模块</a></li>
+                    </ul>
+
+                    <!-- 选项卡开始 -->
+                    <div id="myTabContent" class="tab-content">
+                        <div class="tab-pane active in" id="home">
+                            <br>
+                            <table class="table table-bordered table-striped"  width="800px">
+                                <tr>
+                                    <td>用户ID</td>
+                                    <td><input ng-model="entity.id" class="form-control" placeholder="用户id"></td>
+                                </tr>
+                                <tr>
+                                    <td>用户名称</td>
+                                    <td><input ng-model="entity.username" class="form-control" placeholder="用户名称"></td>
+                                </tr>
+
+
+                                <tr>
+                                    <td>联系电话</td>
+                                    <td><input ng-model="entity.phone" class="form-control" placeholder="电话"></td>
+                                </tr>
+                                <tr>
+                                    <td>活跃度</td>
+                                    <td>活跃+不活跃</td>
+                                </tr>
+                                <tr>
+                                    <td>用户状态</td>
+                                    <td><input ng-model="entity.status" class="form-control" placeholder="用户状态"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="linkman">
+                            <br>
+                            <table class="table table-bordered table-striped" >
+                                <tr>
+                                    <td>备用模块1</td>
+                                    <td>备用模块1-1</td>
+                                </tr>
+                                <tr>
+                                    <td>备用模块2</td>
+                                    <td>备用模块2-2</td>
+                                </tr>
+                                <tr>
+                                    <td>备用模块3</td>
+                                    <td>备用模块3-3</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+                    <!-- 选项卡结束 -->
+
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="frostStatus(entity.id)">冻结该用户</button>
+                    <button class="btn btn-danger"  data-dismiss="modal" aria-hidden="true" ng-click="updateStatus(entity.id)" >解冻该用户</button>
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
