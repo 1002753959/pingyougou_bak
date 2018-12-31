@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>销售折线图</title>
+    <!--引入js-->
+    <script src="../js/Broken/echarts.common.min.js"></script>
+</head>
+<body>
+<!--具备大小(宽高)-->
+<div id="main" style="width: 900px;height: 600px"></div>
+<script type="text/javascript">
+    //初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    //指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '销售折线图'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                saveAsImage: {
+                    show: true
+                }
+            }
+        },
+        legend: {
+            data: ['销量']
+        },
+        xAxis: {
+            data: ["周一", "周二", "周三", "周四","周五","周六","周日"]
+        },
+        yAxis: {},
+        series: [{
+
+            name: '销量',
+            type: 'line',
+            data: [7, 30, 50, 20,30,35,55 ]
+        }]
+    };
+
+    //使用刚指定的配置项和数据显示图表
+    myChart.setOption(option);
+
+</script>
+
+   
+</body>
+</html>
