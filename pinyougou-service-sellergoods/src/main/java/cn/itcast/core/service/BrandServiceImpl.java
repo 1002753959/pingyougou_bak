@@ -1,4 +1,36 @@
 package cn.itcast.core.service;
+//                            _ooOoo_
+//                           o8888888o
+//                           88" . "88
+//                           (| -_- |)
+//                            O\ = /O
+//                        ____/`---'\____
+//                      .   ' \\| |// `.
+//                       / \\||| : |||// \
+//                     / _||||| -:- |||||- \
+//                       | | \\\ - /// | |
+//                     | \_| ''\---/'' | |
+//                      \ .-\__ `-` ___/-. /
+//                   ___`. .' /--.--\ `. . __
+//                ."" '< `.___\_<|>_/___.' >'"".
+//               | | : `- \`.;`\ _ /`;.`/ - ` : | |
+//                 \ \ `-. \_ __\ /__ _/ .-` / /
+//         ======`-.____`-.___\_____/___.-`____.-'======
+//                            `=---='
+//
+//         .............................................
+//                  佛祖镇楼                  BUG辟易
+//          佛曰:
+//                  写字楼里写字间，写字间里程序员；
+//                  程序人员写程序，又拿程序换酒钱。
+//                  酒醒只在网上坐，酒醉还来网下眠；
+//                  酒醉酒醒日复日，网上网下年复年。
+//                  但愿老死电脑间，不愿鞠躬老板前；
+//                  奔驰宝马贵者趣，公交自行程序员。
+//                  别人笑我忒疯癫，我笑自己命太贱；
+//                  不见满街漂亮妹，哪个归得程序员？
+//         .............................................
+
 
 import cn.itcast.core.dao.good.BrandDao;
 import cn.itcast.core.entity.PageResult;
@@ -26,7 +58,7 @@ public class BrandServiceImpl implements BrandService {
     @Autowired
     private BrandDao brandDao;
 
-    public List<Brand> query() {
+    public List<Brand> query(){
         return brandDao.selectByExample(null);
     }
 
@@ -38,25 +70,22 @@ public class BrandServiceImpl implements BrandService {
         Page<Brand> page = (Page<Brand>) brandDao.selectByExample(null);
         //生成pageResult对象
         PageResult pageResult = new PageResult(page.getTotal(), page.getResult());
-        return pageResult;
+        return  pageResult;
     }
 
     /**
      * 添加商品
-     *
      * @param brand
      * @throws Exception
      */
     @Override
     public void add(Brand brand) throws Exception {
-        brand.setStatus("3");
         brandDao.insertSelective(brand);
     }
 
 
     /**
      * 根据Id查询Brand
-     *
      * @param id
      * @return
      * @throws Exception
@@ -90,7 +119,6 @@ public class BrandServiceImpl implements BrandService {
 
     /**
      * 分页+条件查询
-     *
      * @param pageNum
      * @param pageSize
      * @param brand
@@ -106,19 +134,19 @@ public class BrandServiceImpl implements BrandService {
             BrandQuery brandQuery = new BrandQuery();
             //创建条件
             BrandQuery.Criteria criteria = brandQuery.createCriteria();
-            if (null != brand) {
-                if (brand.getStatus() != null) {
-                    criteria.andStatusEqualTo(brand.getStatus());
-                }
-                //如果商品名称不为空并且不是一堆空字符串
-                if (brand.getName() != null && !"".equals(brand.getName().trim())) {
-                    criteria.andNameLike("%" + brand.getName() + "%");
-                }
+            //如果商品名称不为空并且不是一堆空字符串
+            if (brand.getName() != null && !"".equals(brand.getName().trim())) {
+                criteria.andNameLike("%" + brand.getName() + "%");
             }
+            //如果商品的首字母不是空并且不是一堆空串
+            if (brand.getFirstChar() != null && "".equals(brand.getFirstChar().trim())) {
+                criteria.andFirstCharEqualTo(brand.getFirstChar());
+            }
+
             //调用dao层条件查询
             Page<Brand> page = (Page<Brand>) brandDao.selectByExample(brandQuery);
 
-            return new PageResult(page.getTotal(), page.getResult());
+            return new PageResult(page.getTotal(),page.getResult());
         }
         //如果没有查询条件,调用没有查询条件的方法
         return queryPage(pageNum, pageSize);
@@ -127,37 +155,7 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public List<Map> selectOptionList() {
-        return brandDao.selectOptionList();
+        return  brandDao.selectOptionList();
 
-    }
-
-    // 修改审核状态
-    public void updateStatus(Long[] ids, String status) throws Exception {
-        Brand brand = new Brand();
-        brand.setStatus(status);
-        if (null != ids && ids.length > 0) {
-            for (Long id : ids) { // 商品表的ID
-                if ("3".equals(queryBrandById(id).getStatus())) {
-                    brand.setId(id);
-                    // 更新审核状态
-                    brandDao.updateByPrimaryKeySelective(brand);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void updateStatus1(Long[] ids, String status) throws Exception {
-        Brand brand = new Brand();
-        brand.setStatus(status);
-        if (null != ids && ids.length > 0) {
-            for (Long id : ids) { // 商品表的ID
-                if ("0".equals(queryBrandById(id).getStatus())) {
-                    brand.setId(id);
-                    // 更新审核状态
-                    brandDao.updateByPrimaryKeySelective(brand);
-                }
-            }
-        }
     }
 }

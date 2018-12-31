@@ -74,7 +74,6 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
      */
     @Override
     public void add(TypeTemplate typeTemplate) {
-        typeTemplate.setStatus("3");
         typeTemplateDao.insertSelective(typeTemplate);
     }
 
@@ -129,16 +128,15 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             redisTemplate.boundHashOps("specs").put(template.getId(), specList);
         }
 
+
+
         //分页小助手开始
         PageHelper.startPage(page, rows);
         //判断条件是否为空
         TypeTemplateQuery typeTemplateQuery = new TypeTemplateQuery();
-        TypeTemplateQuery.Criteria criteria = typeTemplateQuery.createCriteria();
         if (typeTemplate != null) {
-            if (null != typeTemplate.getStatus()) {
-                criteria.andStatusEqualTo(typeTemplate.getStatus());
-            }
             if (typeTemplate.getName() != null && !"".equals(typeTemplate.getName().trim())) {
+                TypeTemplateQuery.Criteria criteria = typeTemplateQuery.createCriteria();
                 criteria.andNameLike("%" + typeTemplate.getName() + "%");
             }
             Page<TypeTemplate> pageBean = (Page<TypeTemplate>) typeTemplateDao.selectByExample(typeTemplateQuery);
@@ -175,37 +173,5 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         return maps;
     }
 
-    /**
-     * 修改审核状态
-     * @param ids
-     * @param status
-     */
-    @Override
-    public void updateStatus(Long[] ids, String status) {
-        TypeTemplate typeTemplate = new TypeTemplate();
-        typeTemplate.setStatus(status);
-        if(null != ids && ids.length > 0) {
-            for (Long id : ids) { // 商品表的ID
-                if ("3".equals(findOne(id).getStatus())) {
-                    typeTemplate.setId(id);
-                    typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
-                }
-            }
-        }
-    }
-
-    @Override
-    public void updateStatus1(Long[] ids, String status) {
-        TypeTemplate typeTemplate = new TypeTemplate();
-        typeTemplate.setStatus(status);
-        if(null != ids && ids.length > 0) {
-            for (Long id : ids) { // 商品表的ID
-                if ("0".equals(findOne(id).getStatus())) {
-                    typeTemplate.setId(id);
-                    typeTemplateDao.updateByPrimaryKeySelective(typeTemplate);
-                }
-            }
-        }
-    }
 
 }

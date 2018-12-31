@@ -92,7 +92,7 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	}
 	
 	$scope.specList={data:[]}
-	// 查询关联的品牌规格信息:
+	// 查询关联的品牌信息:
 	$scope.findSpecList = function(){
 		specificationService.selectOptionList().success(function(response){
 			$scope.specList = {data:response};
@@ -108,20 +108,4 @@ app.controller('typeTemplateController' ,function($scope,$controller,brandServic
 	$scope.deleteTableRow = function(index){
 		$scope.entity.customAttributeItems.splice(index,1);
 	}
-
-    // 显示状态
-    $scope.status = ["待审核","审核通过","审核未通过","未审核"];
-
-    // 审核的方法:
-    $scope.updateStatus = function(status){
-        typeTemplateService.updateStatus($scope.selectIds,status).success(function(response){
-            if(response.flag){
-                $scope.reloadList();//刷新列表
-                $scope.selectIds = [];
-            }else{
-                alert(response.message);
-            }
-        });
-    }
-
 });	

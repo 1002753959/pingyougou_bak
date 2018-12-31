@@ -33,7 +33,7 @@ app.service("brandService",function ($http) {
     }
 
     //删除
-    this.delete=function (checkedIds) {
+    this.deleteByIds=function (checkedIds) {
        return $http.get("/brand/deleteByIds.do?ids=" + checkedIds)
     }
 
@@ -42,8 +42,4 @@ app.service("brandService",function ($http) {
         return $http.get("../brand/selectOptionList.do")
     }
 
-    //审核
-    this.updateStatus = function(ids,status){
-        return $http.get('../brand/updateStatus1.do?ids='+ids+"&status="+status);
-    }
 })

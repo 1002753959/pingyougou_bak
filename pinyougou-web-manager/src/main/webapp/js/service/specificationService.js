@@ -33,14 +33,4 @@ app.service('specificationService',function($http){
 	this.selectOptionList=function(){
 		return $http.get("../specification/selectOptionList.do");
 	}
-
-    //根据Id查询
-    this.findSpecById=function (id) {
-        return $http.get("/specification/findSpecById.do?id=" + id);
-    }
-
-    //审核
-    this.updateStatus = function(ids,status){
-        return $http.get('../specification/updateStatus1.do?ids='+ids+"&status="+status);
-    }
 });

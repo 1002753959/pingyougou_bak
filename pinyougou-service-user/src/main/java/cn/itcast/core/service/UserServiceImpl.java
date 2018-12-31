@@ -30,17 +30,11 @@ package cn.itcast.core.service;//                            _ooOoo_
 //                  不见满街漂亮妹，哪个归得程序员？
 //         .............................................
 
-import cn.itcast.core.dao.log.PayLogDao;
 import cn.itcast.core.dao.user.UserDao;
-import cn.itcast.core.entity.PageResult;
-import cn.itcast.core.pojo.log.PayLog;
-import cn.itcast.core.pojo.log.PayLogQuery;
 import cn.itcast.core.pojo.user.User;
 import cn.itcast.core.pojo.user.UserQuery;
 import cn.itcast.core.service.UserService;
 import com.alibaba.dubbo.config.annotation.Service;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.mysql.jdbc.TimeUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,8 +66,6 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate redisTemplate;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private PayLogDao payLogDao;
 
     /**
      * 发送消息给MQ让微服务调用腾讯云发送验证码
@@ -146,68 +138,4 @@ public class UserServiceImpl implements UserService {
         userDao.updateByExampleSelective(user,userQuery );
 
     }
-
-    @Override
-    public PageResult queryPage(int pageNum, int pageSize) {
-        //分页小助手第一步
-        PageHelper.startPage(pageNum, pageSize);
-        //查询全部,生成List集合对象
-        List<User> userList = userDao.selectByExample(null);
-
-        //查询其他需要的数据，并将这些数据，封装到userList对象中
-        for (User user : userList) {
-            //拿user表的userId
-            String username = user.getUsername();
-            //设置查询条件
-            PayLogQuery payLogQuery = new PayLogQuery();
-            PayLogQuery.Criteria criteria1 = payLogQuery.createCriteria();
-            criteria1.andUserIdEqualTo(username);
-            //查询payLog表，得到结果集
-            List<PayLog> payLogs_userId = payLogDao.selectByExample(payLogQuery);
-            //循环遍历，查询userId，算出总次数(下单次数)，放到user表中
-            int idTimes=0;
-            for (PayLog payLog_userId : payLogs_userId) {
-                String userId = payLog_userId.getUserId();
-                if(userId!=null){
-                    idTimes++;
-                }
-            }
-            user.setIdTimes(idTimes);
-
-            //添加查询条件之交易状态，再查询一次
-            criteria1.andTradeStateEqualTo("1");
-            List<PayLog> payLogs_tradeState = payLogDao.selectByExample(payLogQuery);
-            int tradeTimes=0;
-            for (PayLog payLog_tradeState : payLogs_tradeState) {
-                String tradeState = payLog_tradeState.getUserId();
-                if(tradeState!=null){
-                    tradeTimes++;
-                }
-            }
-            user.setTradeTimes(tradeTimes);
-
-        }
-
-        //将userList对象强制转换为Page对象
-        Page<User> page=(Page<User>)userList;
-
-        //利用page对象，生成pageResult对象
-        PageResult pageResult = new PageResult(page.getTotal(), page.getResult());
-        return  pageResult;
-    }
-
-//    分页助手——备份
-//    @Override
-//    public PageResult queryPage(int pageNum, int pageSize) {
-//        //分页小助手第一步
-//        PageHelper.startPage(pageNum, pageSize);
-//        //查询全部,直接生成Page对象
-//        Page<User> page = (Page<User>) userDao.selectByExample(null);
-//        for (User user : page) {
-//
-//        }
-//        //生成pageResult对象
-//        PageResult pageResult = new PageResult(page.getTotal(), page.getResult());
-//        return  pageResult;
-//    }
 }

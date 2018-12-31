@@ -804,21 +804,8 @@ public class PayLogQuery {
             this.betweenValue = true;
         }
 
-
-
         protected Criterion(String condition, Object value, Object secondValue) {
             this(condition, value, secondValue, null);
         }
-    }
-
-
-    @Override
-    public String toString() {
-        return "PayLogQuery{" +
-                "orderByClause='" + orderByClause + '\'' +
-                ", distinct=" + distinct +
-                ", oredCriteria=" + oredCriteria +
-                ", fields='" + fields + '\'' +
-                '}';
     }
 }

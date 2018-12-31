@@ -35,34 +35,16 @@
     <bean id="pageAndSolrListener" class="cn.itcast.core.listener.ItemSearchListener"></bean>
 
 
-    <!--发布订阅模式删除索引, 监听器监听哪个目标队列的对象-->
-    <bean id="topicPageAndSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQTopic">
-        <constructor-arg value="pinyougou_topic_page_solr_delete"/>
+    <!-- 点对点模式，删除索引库-->
+    <bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="pinyougou_queue_solr_delete"/>
     </bean>
-
-    <!-- 发布订阅模式, 消息监听容器, 将数据导入solr索引库 -->
+    <!-- 点对点模式, 消息监听容器  删除索引库-->
     <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <!--注入Spring转换后的JMS单例工厂,用来连接消息队列MQ-->
         <property name="connectionFactory" ref="connectionFactory" />
-        <!--注入监听目标对象,指明监听器到底监听哪个队列-->
-        <property name="destination" ref="topicPageAndSolrDeleteDestination" />
-        <!--如果监听到有消息的话执行的消息处理类-->
+        <property name="destination" ref="queueSolrDeleteDestination" />
         <property name="messageListener" ref="itemDeleteListener" />
     </bean>
-    <!--实例化消息处理类-->
     <bean id="itemDeleteListener" class="cn.itcast.core.listener.ItemDeleteListener"></bean>
-
-
-    <!-- 点对点模式，删除索引库-->
-    <!--<bean id="queueSolrDeleteDestination" class="org.apache.activemq.command.ActiveMQQueue">-->
-        <!--<constructor-arg value="pinyougou_queue_solr_delete"/>-->
-    <!--</bean>-->
-    <!--&lt;!&ndash; 点对点模式, 消息监听容器  删除索引库&ndash;&gt;-->
-    <!--<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">-->
-        <!--<property name="connectionFactory" ref="connectionFactory" />-->
-        <!--<property name="destination" ref="queueSolrDeleteDestination" />-->
-        <!--<property name="messageListener" ref="itemDeleteListener" />-->
-    <!--</bean>-->
-    <!--<bean id="itemDeleteListener" class="cn.itcast.core.listener.ItemDeleteListener"></bean>-->
 
 </beans>

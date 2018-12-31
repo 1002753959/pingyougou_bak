@@ -102,7 +102,6 @@ public class BrandController {
      * @return
      * @throws Exception
      */
-
     @RequestMapping("/queryBrandById")
     public Brand queryBrandById(long id) throws Exception {
         Brand brand = brandService.queryBrandById(id);
@@ -166,22 +165,6 @@ public class BrandController {
         return   brandService.selectOptionList();
     }
 
-
-
-    /*
-     * 审核品牌状态
-     * */
-    @RequestMapping("/updateStatus1")
-    public Result updateStatus1(Long[] ids,String status){
-        try {
-            brandService.updateStatus1(ids, status);
-            return new Result(true, "成功");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Result(false, "失败");
-        }
-
-    }
 
 
 }

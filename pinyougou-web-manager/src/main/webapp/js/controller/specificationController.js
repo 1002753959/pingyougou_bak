@@ -87,41 +87,5 @@ app.controller('specificationController' ,function($scope,$controller   ,specifi
 	$scope.deleteTableRow = function(index){
 		$scope.entity.specificationOptionList.splice(index,1);
 	}
-
-    //根据id查询spec
-    $scope.findById = function (id) {
-        specificationService.findSpecById(id).success(
-            function (response) {
-                $scope.entity = response;
-            }
-        )
-    }
-
-    $scope.status = ["待审核","审核通过","审核未通过","未审核"];
-
-    // 审核的方法
-    $scope.updateStatus = function(status){
-        specificationService.updateStatus($scope.selectIds,status).success(function(response){
-            if(response.flag){
-                $scope.reloadList();//刷新列表
-                $scope.selectIds = [];
-            }else{
-                alert(response.message);
-            }
-        });
-    }
-
-    // 显示状态
-
-
-    // $scope.SpecList = [];
-    // // 显示分类:
-    // $scope.findSpecList = function(){
-    //
-    //     specificationService.findAll().success(function(response){
-    //         for(var i=0;i<response.length;i++){
-    //             $scope.SpecList[response[i].id] = response[i].name;
-    //         }
-    //     });
-    // }
+    
 });	

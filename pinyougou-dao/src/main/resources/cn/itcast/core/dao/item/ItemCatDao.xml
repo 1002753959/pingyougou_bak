@@ -68,7 +68,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, parent_id, name, type_id, status
+      id, parent_id, name, type_id
     </if>
     <if test="fields != null" >
       ${fields}
