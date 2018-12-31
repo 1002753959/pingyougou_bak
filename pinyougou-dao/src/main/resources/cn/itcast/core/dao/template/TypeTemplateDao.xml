@@ -213,4 +213,9 @@
       custom_attribute_items = #{customAttributeItems,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--根据Id 查出Spec_ids列的map形式-->
+  <select id="specIdsMap" parameterType="Long" resultType="map">
+    SELECT spec_ids FROM tb_type_template WHERE id = #{id}
+  </select>
 </mapper>

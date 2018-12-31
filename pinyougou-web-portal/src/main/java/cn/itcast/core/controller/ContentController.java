@@ -33,7 +33,6 @@ package cn.itcast.core.controller;
 
 import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.ad.Content;
-import cn.itcast.core.pojo.ad.ContentCategory;
 import cn.itcast.core.service.ContentService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,6 @@ public class ContentController {
     @Reference
     private ContentService contentService;
 
-
     /**
      * 根据广告表的category分类id查出广告结果集
      * @param categoryId
@@ -66,5 +64,6 @@ public class ContentController {
     public List<Content> findByCategoryId(Long  categoryId){
         return contentService.findByCategoryId(categoryId);
     }
+
 
 }

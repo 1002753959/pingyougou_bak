@@ -5,8 +5,6 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="first_char" property="firstChar" jdbcType="VARCHAR" />
-    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +66,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, first_char, birthday
+      id, name, first_char
     </if>
     <if test="fields != null" >
       ${fields}
@@ -90,7 +88,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
-    id,name,first_char,birthday
+    id,name,first_char
     from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -125,9 +123,6 @@
       <if test="birthday != null" >
         birthday,
       </if>
-      <if test="status != null" >
-        status,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -141,9 +136,6 @@
       </if>
       <if test="birthday != null" >
         #{birthday,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -168,9 +160,6 @@
       <if test="record.birthday != null" >
         birthday = #{record.birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.status != null" >
-        status = #{record.status,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -181,8 +170,7 @@
     set id = #{record.id,jdbcType=BIGINT},
       name = #{record.name,jdbcType=VARCHAR},
       first_char = #{record.firstChar,jdbcType=VARCHAR},
-      birthday = #{record.birthday,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR}
+      birthday = #{record.birthday,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -199,9 +187,6 @@
       <if test="birthday != null" >
         birthday = #{birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -209,12 +194,12 @@
     update tb_brand
     set name = #{name,jdbcType=VARCHAR},
       first_char = #{firstChar,jdbcType=VARCHAR},
-      birthday = #{birthday,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR}
+      birthday = #{birthday,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <!--List<Map> selectOptionList();-->
+
+  <!--新加的查询所有返回List<map>集合-->
   <select id="selectOptionList" resultType="map">
-    select id, name text from tb_brand
+    SELECT id,name text from tb_brand
   </select>
 </mapper>

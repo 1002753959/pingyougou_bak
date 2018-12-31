@@ -86,24 +86,5 @@ app.controller('cartController',function($scope,cartService){
 			}				
 		);		
 	}
-
-    //商品收藏
-    $scope.addGoodsCollection=function(itemId){
-        cartService.addGoodsCollection(itemId).success(
-            function(response){
-                $scope.fl=response.flag;
-                window.open("http://localhost:9104/goodsCollection.html");
-            }
-        );
-    }
-
-    //查询所有收藏的商品
-    $scope.findAllGoodsCollection=function(){
-        searchService.findAllGoodsCollection().success(
-            function(response){
-                $scope.allGoodsCollectionList=response;
-            }
-        );
-    }
 	
 });

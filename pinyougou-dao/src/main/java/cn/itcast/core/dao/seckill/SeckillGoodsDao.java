@@ -2,8 +2,9 @@ package cn.itcast.core.dao.seckill;
 
 import cn.itcast.core.pojo.seckill.SeckillGoods;
 import cn.itcast.core.pojo.seckill.SeckillGoodsQuery;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SeckillGoodsDao {
     int countByExample(SeckillGoodsQuery example);

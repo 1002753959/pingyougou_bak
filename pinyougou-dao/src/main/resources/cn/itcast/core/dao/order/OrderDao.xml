@@ -532,6 +532,13 @@
   </update>
 
 
+  <resultMap id="goodsTimeMap" type="cn.itcast.core.entity.GoodsTime">
+    <id column="id" property="goodsId"/>
+    <result column="goods_name" property="goodsName"/>
+    <result column="price" property="price"/>
+    <result column="count" property="count"/>
+  </resultMap>
+
   <select id="findLine"  resultType="Integer" parameterType="map">
   SELECT
   i.total_fee

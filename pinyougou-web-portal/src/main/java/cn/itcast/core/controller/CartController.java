@@ -230,17 +230,6 @@ public class CartController {
         return cartList;
     }
 
-    //商品收藏
-    @RequestMapping("/addGoodsCollection")
-    public Result addGoodsCollection(Long itemId){
-        return cartService.addGoodsCollection(itemId);
-    }
-
-    //查询所有收藏的商品
-    @RequestMapping("/findAllGoodsCollection")
-    public List findAllGoodsCollection(){
-        return cartService.findAllGoodsCollection();
-    }
 
 }
 

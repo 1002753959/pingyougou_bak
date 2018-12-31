@@ -2,8 +2,9 @@ package cn.itcast.core.dao.log;
 
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.log.PayLogQuery;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface PayLogDao {
     int countByExample(PayLogQuery example);

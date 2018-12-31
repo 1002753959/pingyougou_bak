@@ -32,7 +32,6 @@ package cn.itcast.core.service;
 //         .............................................
 
 import cn.itcast.core.entity.Cart;
-import cn.itcast.core.entity.Result;
 import cn.itcast.core.pojo.item.Item;
 
 import java.util.List;
@@ -49,8 +48,4 @@ public interface CartService {
     void persistenceCart(List<Cart> newCartList, String name);
 
     List<Cart> queryCartListByName(String name);
-
-    Result addGoodsCollection(Long itemId);
-
-    List findAllGoodsCollection();
 }

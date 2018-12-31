@@ -12,13 +12,7 @@ app.controller("contentController",function($scope,contentService){
 	
 	//搜索  （传递参数）
 	$scope.search=function(){
-		location.href="http://localhost:9104/search.html#?keywords="+$scope.keywords;
+		location.href="http://localhost:9103/search.html#?keywords="+$scope.keywords;
 	}
-	//根据分类ID查询全部商品分类的一级分类
-    $scope.findByCategoryList1 = function(categoryId){
-        contentService.findByCategoryList1(categoryId).success(function(response){
-            $scope.itemCatList1 = response;//List<Content>
-        });
-    }
 	
 });

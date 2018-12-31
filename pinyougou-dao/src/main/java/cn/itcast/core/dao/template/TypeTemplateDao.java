@@ -2,8 +2,10 @@ package cn.itcast.core.dao.template;
 
 import cn.itcast.core.pojo.template.TypeTemplate;
 import cn.itcast.core.pojo.template.TypeTemplateQuery;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+import java.util.Map;
 
 public interface TypeTemplateDao {
     int countByExample(TypeTemplateQuery example);
@@ -27,4 +29,6 @@ public interface TypeTemplateDao {
     int updateByPrimaryKeySelective(TypeTemplate record);
 
     int updateByPrimaryKey(TypeTemplate record);
+
+    List<Map<String,String>> specIdsMap(Long id);
 }

@@ -4,5 +4,6 @@ import java.util.List;
 
 public interface OrderInfoService {
 
-    List<Integer> findLine(String name, Integer num);
+
+    List<Integer> findLine(String name, Integer time);
 }

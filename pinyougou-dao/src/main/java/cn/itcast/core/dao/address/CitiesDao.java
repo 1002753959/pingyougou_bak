@@ -2,8 +2,9 @@ package cn.itcast.core.dao.address;
 
 import cn.itcast.core.pojo.address.Cities;
 import cn.itcast.core.pojo.address.CitiesQuery;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface CitiesDao {
     int countByExample(CitiesQuery example);

@@ -1,8 +1,12 @@
 package cn.itcast.core.pojo.item;
 
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.solr.core.mapping.Dynamic;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Map;
 
 public class Item implements Serializable {
     /**
@@ -10,20 +14,56 @@ public class Item implements Serializable {
      */
     private Long id;
 
-    /**
-     * 商品标题
-     */
+    @Field("item_price")
+    private BigDecimal price;
+
+    @Field("item_image")
+    private String image;
+
+    @Field("item_goodsid")
+    private Long goodsId;
+
+    @Field("item_category")
+    private String category;
+
+    @Field("item_brand")
+    private String brand;
+
+    @Field("item_seller")
+    private String seller;
+
+    @Field("item_title")
     private String title;
+
+    /**
+     * 更新时间
+     */
+    @Field("item_updatetime")
+    private Date updateTime;
+
+    //现在是字符串类型, {"机身内存":"16G","网络":"联通3G"}
+    private String spec;
+
+    //规格列表想要映射到solr中的动态域上,就要在代码中用JSON转换成map的形式,
+    // map的键对应到动态域的*上,map的值对应到动态域的值上
+    @Dynamic
+    @Field("item_spec_*")
+    private Map<String, String> specMap;
+
+    public Map<String, String> getSpecMap() {
+        return specMap;
+    }
+
+    public void setSpecMap(Map<String, String> specMap) {
+        this.specMap = specMap;
+    }
 
     /**
      * 商品卖点
      */
     private String sellPoint;
 
-    /**
-     * 商品价格，单位为：元
-     */
-    private BigDecimal price;
+
 
     private Integer stockCount;
 
@@ -37,10 +77,7 @@ public class Item implements Serializable {
      */
     private String barcode;
 
-    /**
-     * 商品图片
-     */
-    private String image;
+
 
     /**
      * 所属类目，叶子类目
@@ -57,10 +94,7 @@ public class Item implements Serializable {
      */
     private Date createTime;
 
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
+
 
     private String itemSn;
 
@@ -70,19 +104,13 @@ public class Item implements Serializable {
 
     private String isDefault;
 
-    private Long goodsId;
+
 
     private String sellerId;
 
     private String cartThumbnail;
 
-    private String category;
 
-    private String brand;
-
-    private String spec;
-
-    private String seller;
 
     private static final long serialVersionUID = 1L;
 

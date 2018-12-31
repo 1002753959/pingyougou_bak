@@ -3,8 +3,9 @@ package cn.itcast.core.dao.order;
 import cn.itcast.core.entity.GoodsTime;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface OrderDao {
     int countByExample(OrderQuery example);
@@ -29,6 +30,6 @@ public interface OrderDao {
 
     int updateByPrimaryKey(Order record);
 
-     List<Integer> findLine(@Param("prefix") int prefix, @Param("postfix") int postfix,@Param("name") String name);
+    List<Integer> findLine(@Param("prefix") int prefix, @Param("postfix") int postfix,@Param("name") String name);
 
 }

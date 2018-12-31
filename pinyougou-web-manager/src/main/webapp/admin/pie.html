@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>销售饼图</title>
     <!--引入js-->
-    <script src="../js/broken/echarts.min.js"></script>
+    <script src="../js/Broken/echarts.common.min.js"></script>
+    <script src="../js/Broken/jquery-2.1.0.min.js"></script>
 </head>
 <body>
 <!--具备大小(宽高)-->
@@ -16,7 +17,7 @@
     //指定图表的配置项和数据
     var option = {
         title: {
-            text: '销售饼图',
+            text: '销售',
             x: 'center'
         },
         tooltip:{
@@ -26,7 +27,7 @@
         legend:{
             orient:'vertical',
             left:'left',
-            data:['周一','周二','周三','周四','周五','周六','周日'],
+            data:['手机','图书','服饰','家具','电脑','酒'],
         },
         series:[
             {
@@ -34,13 +35,12 @@
                 radius:'55%',   //半径
                 center:['50%','60%'],    //圆心位置
                 data:[
-                    {value:290,name:'周一'},
-                    {value:310,name:'周二'},
-                    {value:234,name:'周三'},
-                    {value:100,name:'周四'},
-                    {value:200,name:'周五'},
-                    {value:152,name:'周六'},
-                    {value:50,name:'周日'},
+                    {value:360,name:'手机'},
+                    {value:200,name:'图书'},
+                    {value:234,name:'服饰'},
+                    {value:300,name:'家具'},
+                    {value:152,name:'电脑'},
+                    {value:70,name:'酒'},
                 ]
             }
         ]
@@ -51,6 +51,6 @@
 
 </script>
 
-
+   
 </body>
 </html>

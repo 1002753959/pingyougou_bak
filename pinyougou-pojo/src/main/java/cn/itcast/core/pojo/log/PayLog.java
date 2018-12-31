@@ -181,6 +181,4 @@ public class PayLog implements Serializable {
         result = prime * result + ((getPayType() == null) ? 0 : getPayType().hashCode());
         return result;
     }
-
-
 }
