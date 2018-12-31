@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class User implements Serializable {
-    /**
-     * 新添加用户状态
-     */
     private Long id;
 
     /**
@@ -110,6 +107,8 @@ public class User implements Serializable {
      * 最后登录时间
      */
     private Date lastLoginTime;
+
+    private String adress;
 
     /**
      * 下单次数

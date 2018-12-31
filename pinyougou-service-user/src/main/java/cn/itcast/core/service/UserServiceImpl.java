@@ -36,6 +36,7 @@ import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.log.PayLog;
 import cn.itcast.core.pojo.log.PayLogQuery;
 import cn.itcast.core.pojo.user.User;
+import cn.itcast.core.pojo.user.UserQuery;
 import cn.itcast.core.service.UserService;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -120,6 +121,30 @@ public class UserServiceImpl implements UserService {
             //验证码不正确跑出异常
             throw new RuntimeException("验证码不正确");
         }
+    }
+
+    @Override
+    //根据名字(当前登录的)查询数据
+    public User getUserInfomation(String name) throws Exception {
+        UserQuery userQuery = new UserQuery();
+        UserQuery.Criteria criteria = userQuery.createCriteria();
+        criteria.andUsernameEqualTo(name);
+        List<User> users = userDao.selectByExample(userQuery);
+        if (0<users.size()){
+            users.get(0).setPassword("");
+            return users.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public void saveUserInfomation(User user) throws Exception {
+
+
+        UserQuery userQuery = new UserQuery();
+        userQuery.createCriteria().andUsernameEqualTo(user.getUsername());
+        userDao.updateByExampleSelective(user,userQuery );
+
     }
 
     @Override

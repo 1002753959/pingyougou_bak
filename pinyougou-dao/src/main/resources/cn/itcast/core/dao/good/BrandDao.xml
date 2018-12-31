@@ -68,7 +68,7 @@
   </sql>
   <sql id="Base_Column_List" >
     <if test="fields == null" >
-      id, name, first_char, birthday, status
+      id, name, first_char
     </if>
     <if test="fields != null" >
       ${fields}
@@ -90,7 +90,7 @@
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
-    id,name,first_char,birthday,status
+    id,name,first_char
     from tb_brand
     where id = #{id,jdbcType=BIGINT}
   </select>

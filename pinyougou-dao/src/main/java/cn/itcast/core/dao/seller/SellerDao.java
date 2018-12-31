@@ -2,9 +2,8 @@ package cn.itcast.core.dao.seller;
 
 import cn.itcast.core.pojo.seller.Seller;
 import cn.itcast.core.pojo.seller.SellerQuery;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface SellerDao {
     int countByExample(SellerQuery example);

@@ -4,9 +4,8 @@ import cn.itcast.core.entity.GoodsTime;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.order.Order;
 import cn.itcast.core.pojo.order.OrderQuery;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface OrderDao {
     int countByExample(OrderQuery example);

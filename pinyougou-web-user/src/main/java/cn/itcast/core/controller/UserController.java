@@ -37,6 +37,7 @@ import cn.itcast.core.service.UserService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,32 +56,31 @@ public class UserController {
 
 
     @RequestMapping("/sendCode")
-    public Result sendCode (String phone){
+    public Result sendCode(String phone) {
         try {
-                if (PhoneFormatCheckUtils.isPhoneLegal(phone)) {
+            if (PhoneFormatCheckUtils.isPhoneLegal(phone)) {
                 userService.sendCode(phone);
                 return new Result(true, "发送成功");
             } else {
                 return new Result(false, "手机号格式不正确");
             }
-            } catch (Exception e) {
-                e.printStackTrace();
-                return new Result(false, "发送失败");
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "发送失败");
+        }
     }
-
-
     /**
      * 新添加用户
+     *
      * @param smscode
      * @param user
      */
     @RequestMapping("/add")
-    public Result add( String smscode,@RequestBody User user) {
+    public Result add(String smscode, @RequestBody User user) {
         try {
             userService.add(smscode, user);
             return new Result(true, "注册成功");
-        }catch (RuntimeException run){
+        } catch (RuntimeException run) {
             //接住验证码那边抛出的异常
             return new Result(false, run.getMessage());
         } catch (Exception e) {
@@ -88,6 +88,37 @@ public class UserController {
             return new Result(false, "注册失败");
         }
 
+    }
+
+    //查询用户信息http://localhost:9105/user/getUserInfomation.do
+    @RequestMapping("/getUserInfomation")
+    public User getUserInfomation() {
+        try {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            if (null == name | "".equals(name)) {
+                return null;
+            }
+            User user = userService.getUserInfomation(name);
+            return user;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //    http://localhost:9105/user/saveUserInfomation.do
+    @RequestMapping("/saveUserInfomation")
+    public Result saveUserInfomation(@RequestBody User user) {
+        try {
+            String name = SecurityContextHolder.getContext().getAuthentication().getName();
+            if (null == name | "".equals(name)) {
+                return null;
+            }
+            userService.saveUserInfomation(user);
+            return new Result(true, "保存成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "保存失败");
+        }
     }
 }
 
