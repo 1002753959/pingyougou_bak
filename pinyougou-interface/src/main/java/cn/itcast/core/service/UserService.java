@@ -6,4 +6,8 @@ public interface UserService {
     void sendCode(String phone);
 
     void add(String smscode, User user);
+
+    User getUserInfomation(String name) throws Exception;
+
+    void saveUserInfomation(User user) throws  Exception;
 }

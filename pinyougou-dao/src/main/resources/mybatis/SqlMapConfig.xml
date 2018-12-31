@@ -5,6 +5,10 @@
 <configuration>
 
 
+    <settings>
+        <setting name="logImpl" value="LOG4J"></setting>
+
+    </settings>
 
     <!--配置分页小助手-->
     <plugins>
@@ -12,8 +16,6 @@
             <property name="dialect" value="mysql"/>
         </plugin>
     </plugins>
-
-
 
 
 
