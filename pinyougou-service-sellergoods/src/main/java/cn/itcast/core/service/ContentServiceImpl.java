@@ -3,6 +3,7 @@ package cn.itcast.core.service;
 import cn.itcast.core.dao.ad.ContentDao;
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.ad.Content;
+import cn.itcast.core.pojo.ad.ContentCategory;
 import cn.itcast.core.pojo.ad.ContentQuery;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -114,8 +115,5 @@ public class ContentServiceImpl implements ContentService {
 			return contentList;
 		}
     }
-
-
-
 
 }
