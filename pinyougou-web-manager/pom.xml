@@ -173,18 +173,13 @@
            <artifactId>spring-data-solr</artifactId>
            <version>1.5.5.RELEASE</version>
        </dependency>
-        <!--poi-->
-       <dependency>
-           <groupId>org.apache.poi</groupId>
-           <artifactId>poi</artifactId>
-           <version>3.11</version>
-       </dependency>
-
+       <!--interface-->
        <dependency>
            <groupId>com.itheima</groupId>
            <artifactId>pinyougou-interface</artifactId>
            <version>1.0-SNAPSHOT</version>
        </dependency>
+       <!--poi-->
        <dependency>
            <groupId>org.apache.poi</groupId>
            <artifactId>poi</artifactId>

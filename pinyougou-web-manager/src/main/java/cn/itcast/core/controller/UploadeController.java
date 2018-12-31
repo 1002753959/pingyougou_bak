@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/upload")
-public class UploadeController {
+public class  UploadeController {
 
     //从内存中读取properties文件中的值
     @Value("${FILE_SERVER_URL}")
