@@ -1564,6 +1564,76 @@ public class UserQuery {
             addCriterion("last_login_time not between", value1, value2, "lastLoginTime");
             return (Criteria) this;
         }
+
+        public Criteria andAdressIsNull() {
+            addCriterion("adress is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressIsNotNull() {
+            addCriterion("adress is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressEqualTo(String value) {
+            addCriterion("adress =", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressNotEqualTo(String value) {
+            addCriterion("adress <>", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressGreaterThan(String value) {
+            addCriterion("adress >", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressGreaterThanOrEqualTo(String value) {
+            addCriterion("adress >=", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressLessThan(String value) {
+            addCriterion("adress <", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressLessThanOrEqualTo(String value) {
+            addCriterion("adress <=", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressLike(String value) {
+            addCriterion("adress like", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressNotLike(String value) {
+            addCriterion("adress not like", value, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressIn(List<String> values) {
+            addCriterion("adress in", values, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressNotIn(List<String> values) {
+            addCriterion("adress not in", values, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressBetween(String value1, String value2) {
+            addCriterion("adress between", value1, value2, "adress");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdressNotBetween(String value1, String value2) {
+            addCriterion("adress not between", value1, value2, "adress");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
