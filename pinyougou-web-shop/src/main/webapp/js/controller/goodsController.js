@@ -1,9 +1,9 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller,$location,$window,typeTemplateService ,itemCatService,uploadService ,goodsService){
+app.controller('goodsController' ,function($scope,$controller,$location,typeTemplateService ,itemCatService,uploadService ,goodsService){	
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
-    //读取列表数据绑定到表单中
+    //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
 		goodsService.findAll().success(
 			function(response){
@@ -261,8 +261,8 @@ app.controller('goodsController' ,function($scope,$controller,$location,$window,
 		return newList;
 	}
 	
-	// 显示状态         0        1          	2			3		4		  5	       6
-	$scope.status = ["未审核","审核通过","审核未通过","审核中","已上架","已下架","关闭"];
+	// 显示状态
+	$scope.status = ["未审核","审核通过","审核未通过","关闭"];
 	
 	$scope.itemCatList = [];
 	// 显示分类:
@@ -273,78 +273,4 @@ app.controller('goodsController' ,function($scope,$controller,$location,$window,
 			}
 		});
 	}
-
-
-	//提交审核
-	$scope.upAudit = function(){
-        goodsService.upAudit($scope.selectIds).success(
-        	function(response) {
-            if (response.flag) {
-                location.reload();
-            } else {
-                alert(response.message);
-            }
-        });
-	}
-
-    //上架
-    $scope.up = function(){
-        goodsService.up($scope.selectIds).success(
-            function(response) {
-                if (response.flag) {
-                    location.reload();
-                } else {
-                    alert(response.message);
-                }
-            });
-    }
-
-
-    //下架
-    $scope.down = function(){
-        goodsService.down($scope.selectIds).success(
-            function(response) {
-                if (response.flag) {
-                    location.reload();
-                } else {
-                    alert(response.message);
-                }
-            });
-    }
-
-
-
-
-    // $scope.dele=function(){
-    //     //获取选中的复选框
-    //     goodsService.dele( $scope.selectIds ).success(
-    //         function(response){
-    //             if(response.flag){
-    //                 $scope.reloadList();//刷新列表
-    //                 $scope.selectIds = [];
-    //             }
-    //         }
-    //     );
-    // }
-
-    // $scope.findAll=function(){
-    //     goodsService.findAll().success(
-    //         function(response){
-    //             $scope.list=response;
-    //         }
-    //     );
-    // }
-
-
-//	$scope.uploadFile = function(){
-//     // 调用uploadService的方法完成文件的上传
-//     uploadService.uploadFile().success(function(response){
-//         if(response.flag){
-//             // 获得url
-//             $scope.image_entity.url =  response.message;
-//         }else{
-//             alert(response.message);
-//         }
-//     });
-// }
 });	

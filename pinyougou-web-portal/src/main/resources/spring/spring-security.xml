@@ -11,6 +11,7 @@
 	
 	<http pattern="/index.html" security="none"></http>
 	<http pattern="/search.html" security="none"></http>
+    <http pattern="/cart.html" security="none"></http>
 	<!--<http pattern="/cart.html" security="none"></http>-->
 <!-- 	<http pattern="/cart.html" security="none"></http> -->
     	

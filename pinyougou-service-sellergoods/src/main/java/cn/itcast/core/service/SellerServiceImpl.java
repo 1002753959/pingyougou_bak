@@ -73,7 +73,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public Seller queryUserByUserName(String username)   {
+    public Seller queryUserByUserName(String username) {
         return sellerDao.selectByPrimaryKey(username);
     }
 

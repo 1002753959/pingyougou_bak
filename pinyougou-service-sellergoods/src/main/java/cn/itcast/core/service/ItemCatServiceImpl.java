@@ -33,6 +33,7 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.dao.item.ItemCatDao;
 import cn.itcast.core.entity.Result;
+import cn.itcast.core.pojo.ad.Content;
 import cn.itcast.core.pojo.item.ItemCat;
 import cn.itcast.core.pojo.item.ItemCatQuery;
 import com.alibaba.dubbo.config.annotation.Service;
@@ -112,6 +113,20 @@ public class ItemCatServiceImpl implements ItemCatService {
     @Override
     public List<ItemCat> findAll() {
         return itemCatDao.selectByExample(null);
+    }
+
+
+    //查询商品分类id为1的商品
+    @Override
+    public List<ItemCat> findByCategoryList1(Long categoryId) {
+        List<ItemCat> itemCatList = (List<ItemCat>) redisTemplate.boundHashOps("ItemCat").get(categoryId);
+        if (itemCatList != null && itemCatList.size() > 0){
+            return itemCatList;
+        }else {
+            ItemCatQuery itemCatQuery = new ItemCatQuery();
+            itemCatQuery.createCriteria().andParentIdEqualTo(categoryId);
+            return itemCatDao.selectByExample(itemCatQuery);
+        }
     }
 
 

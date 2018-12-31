@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/pages-seckillOrder.css" />
 </head>
 
-<body>
+<body ng-app="adressApp" ng-controller="addressController" ng-init="initAddressList()">
     <!-- 头部栏位 -->
     <!--页面顶部-->
 <div id="nav-bottom">
@@ -145,6 +145,109 @@ $(function(){
 <script type="text/javascript" src="pages/userInfo/distpicker.data.js"></script>
 <script type="text/javascript" src="pages/userInfo/distpicker.js"></script>
 <script type="text/javascript" src="pages/userInfo/main.js"></script>
+	<script type="text/javascript" src="plugins/angularjs/angular.min.js"></script>
+	<script>
+
+        var address = angular.module("adressApp", []);
+        address.controller("addressController", function ($scope, $http) {
+            //TODO ,初始化数据使用的方法 获取当前用户的所有地址,如果没有则初始化地址信息
+            $scope.initAddressList = function () {
+                $scope.AddressPojo = {};
+                $scope.AddressPojo.address="";
+                $scope.AddressPojo.provinceId="";
+                $scope.AddressPojo.cityId="";
+                $scope.AddressPojo.townId="";
+                // TODO 加载默认数据
+                $http.post('../receiverAddress/findReceiverAddressById.do?id=0').success(
+                    function (respose) {
+                        $scope.AddressPojoList=respose;
+
+
+                    })
+                //  FIXME 初识城市三级菜单的省数据
+                $http.post('../address/findByParentId.do').success(function (response) {
+                    $scope.ProvincesList = response;
+
+                })
+            }
+			//   TODO  通过对象保存数据
+            $scope.saveAdressPojo = function () {
+                $http.post('../receiverAddress/saveReceiverAddress.do', $scope.AddressPojo).success(
+                    function (respose) {
+
+                        if (respose.flag){
+                            $scope.AddressPojo="";
+                           location.reload();
+						}else {
+
+                            alert(保存失败)
+						}
+
+                    }
+				)
+            }
+
+
+            // TODO  通过id删除数据
+            $scope.deleteAddressById = function ($event, id) {
+
+
+                $http.post('../receiverAddress/deleteReceiverAddressById.do?id='+id).success(
+                    function (respose) {
+                        alert(respose.message);
+
+                        location.reload();
+                    })
+            }
+            //TODO 通过id 更改数据,获取数据后赋值给双向绑定数据
+			$scope.edetAdressPojo=function ($event, id) {
+                $http.post('../receiverAddress/findReceiverAddressById.do?id='+id).success(
+                    function (respose) {
+
+                        $scope.AddressPojo =respose[0];
+
+                    })
+
+
+            }
+            //TODO 清空AdressPojo数据clearAdressPojo
+			$scope.clearAdressPojo=function () {
+                $scope.AddressPojo="";
+            }
+
+            $scope.setDefault=function ($event, id) {
+                $http.post('../receiverAddress/setDefaultReceiverAddressById.do?id='+id).success(
+                    function (respose) {
+
+                        if (respose.flag){
+                            location.reload();
+						}
+
+                    })
+
+            }
+
+            //  TODO 根据id获取区域 双向绑定数据  AddressPojo.provinceId
+            $scope.$watch("AddressPojo.provinceId",function(newValue,oldValue){
+                $http.post('../address/findCitiesByProvinceid.do?provinceid='+newValue).success(function (response) {
+                    //数据改变
+
+                    $scope.CitiesList = "";
+                    $scope.CitiesList = response;
+
+                })
+            })
+            // TODO 根据id获取区域 双向绑定数据 AddressPojo.cityId
+            $scope.$watch("AddressPojo.cityId",function(newValue,oldValue){
+                $http.post('../address/findAreasByCities.do?cityid='+newValue).success(function (response) {
+                    $scope.AerasList = "";
+                    $scope.AerasList = response;
+                })
+            })
+        })
+
+
+	</script>
 </body>
     <!--header-->
     <div id="account">
@@ -205,27 +308,23 @@ $(function(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>刘田田</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
+                                    <tr ng-repeat="entity in AddressPojoList">
+                                        <td>{{entity.contact}}</td>
+                                        <td>北京 北京市 海淀区 {{entity.address}}</td>
+                                        <td>{{entity.mobile}}</td>
                                         <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            默认地址
+                                            <a  data-toggle="modal" data-target=".edit" data-keyboard="false" ng-click="edetAdressPojo($event,entity.id)">编辑</a>
+                                            <a href="#"ng-click="deleteAddressById($event,entity.id)">删除</a>
+											<!--1默认,否则为普通-->
+
+
+									<a href="#"  ng-if="entity.isDefault=='0'" ng-click="setDefault($event,entity.id)">设为默认</a>
+									<a href="#"  ng-if="!entity.isDefault" ng-click="setDefault($event,entity.id)">设为默认</a>
+									<a href="#"  style = "text-decoration: underline ; color :black;" ng-if="entity.isDefault=='1'">默认地址</a>
+
+
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>沈沉</td>
-                                        <td>北京 北京市 海淀区 上地街道东北旺西路8号中关村软件园9号楼</td>
-                                        <td>1774***********4</td>
-                                        <td>
-                                            <a href="#">编辑</a>
-                                            <a href="#">删除</a>
-                                            <a href="#">设为默认</a>
-                                        </td>
-                                    </tr>
-                                    
                                 </tbody>
                             </table>                          
                         </div>
@@ -242,47 +341,51 @@ $(function(){
                                             <div class="control-group">
                                             <label class="control-label">收货人：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="AddressPojo.contact">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">所在地区：</label>
                                             <div class="controls">
-                                                <div data-toggle="distpicker">
-                                                <div class="form-group area">
-                                                    <select class="form-control" id="province1"></select>
-                                                </div>
-                                                <div class="form-group area">
-                                                    <select class="form-control" id="city1"></select>
-                                                </div>
-                                                <div class="form-group area">
-                                                    <select class="form-control" id="district1"></select>
-                                                </div>
+												<div class="form-group area">
+													<!--<select class="form-control" id="province1" ></select>-->
+													<!--TODO 区域-->
+													<select id="sheng" class="form-control" ng-model="AddressPojo.provinceId"
+															ng-options="x.provinceid as x.province for x in ProvincesList"></select>
+												</div>
+												<div class="form-group area">
+													<select id="shi" class="form-control" ng-model="AddressPojo.cityId"
+															ng-options="x.cityid as x.city for x in CitiesList" ></select>
+												</div>
+												<div class="form-group area">
+													<select id="xian" class="form-control" ng-model="AddressPojo.townId"
+															ng-options="x.areaid as x.area for x in AerasList"></select>
+												</div>
+
                                             </div>
-                                            </div>									 
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">详细地址：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-large">
+                                                <input type="text" class="input-large" ng-model="AddressPojo.address">
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">联系电话：</label>
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="AddressPojo.mobile">
                                             </div>
                                         </div>
+                                        <!--<div class="control-group">-->
+                                            <!--<label class="control-label">邮箱：</label>-->
+                                            <!--<div class="controls">-->
+                                                <!--<input type="text" class="input-medium" ng-model="AddressPojo.mobile">-->
+                                            <!--</div>-->
+                                        <!--</div>-->
                                         <div class="control-group">
-                                            <label class="control-label">邮箱：</label>
+                                            <label class="control-label">地址别名：</label >
                                             <div class="controls">
-                                                <input type="text" class="input-medium">
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <label class="control-label">地址别名：</label>
-                                            <div class="controls">
-                                                <input type="text" class="input-medium">
+                                                <input type="text" class="input-medium" ng-model="AddressPojo.alias">
                                             </div>
                                             <div class="othername">
                                                 建议填写常用地址：<a href="#" class="sui-btn btn-default">家里</a>　<a href="#" class="sui-btn btn-default">父母家</a>　<a href="#" class="sui-btn btn-default">公司</a>
@@ -290,12 +393,18 @@ $(function(){
                                         </div>
                                         
                                         </form>
-                                        
-                                        
+										{{AddressPojo.provinceId}}
+										{{AddressPojo.cityId}}
+										{{AddressPojo.townId}}
+                                        {{AddressPojo.address}}
+                                        {{AddressPojo.contact}}
+                                        {{AddressPojo.mobile}}
+                                        {{AddressPojo.alias}}
+
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large">确定</button>
-                                        <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large">取消</button>
+                                        <button type="button" data-ok="modal" class="sui-btn btn-primary btn-large" ng-click="saveAdressPojo()">确定</button>
+                                        <button type="button" data-dismiss="modal" class="sui-btn btn-default btn-large" ng-click="clearAdressPojo()">取消</button>
                                     </div>
                                 </div>
                             </div>

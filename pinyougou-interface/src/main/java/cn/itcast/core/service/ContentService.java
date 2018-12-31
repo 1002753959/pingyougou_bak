@@ -2,6 +2,7 @@ package cn.itcast.core.service;
 
 import cn.itcast.core.entity.PageResult;
 import cn.itcast.core.pojo.ad.Content;
+import cn.itcast.core.pojo.ad.ContentCategory;
 
 import java.util.List;
 
